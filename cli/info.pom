@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+  <name>Osmocrat CLI</name>
+  <description>Osmocrat provides tools for working with OSM data</description>
+  <url>https://github.com/topobyte/osmocrat</url>
+</project>
