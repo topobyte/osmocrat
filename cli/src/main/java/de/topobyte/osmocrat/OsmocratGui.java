@@ -22,12 +22,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
 import de.topobyte.osm4j.core.access.OsmIterator;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.dataset.ListDataSetLoader;
+import de.topobyte.osm4j.core.model.iface.OsmNode;
 import de.topobyte.osm4j.utils.FileFormat;
 import de.topobyte.osm4j.utils.OsmIoUtils;
 import de.topobyte.utilities.apache.commons.cli.OptionHelper;
@@ -72,6 +77,18 @@ public class OsmocratGui
 				.println(String.format("Loaded %d nodes, %d ways, %d relations",
 						data.getNodes().size(), data.getWays().size(),
 						data.getRelations().size()));
+
+		JFrame frame = new JFrame();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JList<OsmNode> list = new JList<>(new NodeModel(data.getNodes()));
+		JScrollPane jsp = new JScrollPane(list);
+		frame.setContentPane(jsp);
+
+		list.setCellRenderer(new NodeCellRenderer());
+
+		frame.setSize(800, 600);
+		frame.setVisible(true);
 	}
 
 }
