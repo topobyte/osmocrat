@@ -1,5 +1,7 @@
 dependencies {
     compile project(':osmocrat-core')
+
+    compile 'de.topobyte:commons-cli-helper:0.0.6'
 }
 
 task copyJars(type: Copy) {
