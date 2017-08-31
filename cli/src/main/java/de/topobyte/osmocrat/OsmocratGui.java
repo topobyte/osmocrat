@@ -79,7 +79,7 @@ public class OsmocratGui
 						data.getNodes().size(), data.getWays().size(),
 						data.getRelations().size()));
 
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame("Osmocrat");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JList<OsmNode> list = new JList<>(new NodeModel(data.getNodes()));
