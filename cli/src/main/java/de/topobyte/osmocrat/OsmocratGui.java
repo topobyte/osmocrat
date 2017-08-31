@@ -33,6 +33,7 @@ import de.topobyte.osm4j.core.access.OsmIterator;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.dataset.ListDataSetLoader;
 import de.topobyte.osm4j.core.model.iface.OsmNode;
+import de.topobyte.osm4j.core.model.impl.Node;
 import de.topobyte.osm4j.utils.FileFormat;
 import de.topobyte.osm4j.utils.OsmIoUtils;
 import de.topobyte.utilities.apache.commons.cli.OptionHelper;
@@ -86,6 +87,7 @@ public class OsmocratGui
 		frame.setContentPane(jsp);
 
 		list.setCellRenderer(new NodeCellRenderer());
+		list.setPrototypeCellValue(new Node(1, 2, 3));
 
 		frame.setSize(800, 600);
 		frame.setVisible(true);
