@@ -15,24 +15,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with osmocrat. If not, see <http://www.gnu.org/licenses/>.
 
-package de.topobyte.osmocrat;
+package de.topobyte.osmocrat.list;
 
 import java.awt.Component;
-import java.util.List;
 
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-
 import de.topobyte.osm4j.core.model.iface.OsmNode;
-import de.topobyte.osm4j.core.model.iface.OsmTag;
-import de.topobyte.osm4j.core.model.util.OsmModelUtil;
 
-public class NodeCellRenderer extends JLabel
+public class NodeCellRenderer extends BaseCellRenderer<OsmNode>
 		implements ListCellRenderer<OsmNode>
 {
 
@@ -47,27 +39,10 @@ public class NodeCellRenderer extends JLabel
 	public Component getListCellRendererComponent(JList<? extends OsmNode> list,
 			OsmNode node, int index, boolean isSelected, boolean cellHasFocus)
 	{
-		List<? extends OsmTag> tags = OsmModelUtil.getTagsAsList(node);
-		Function<OsmTag, String> converter = new Function<OsmTag, String>() {
-
-			@Override
-			public String apply(OsmTag tag)
-			{
-				return tag.getKey() + "=" + tag.getValue();
-			}
-		};
-
 		setText(String.format("%d: %.6f, %.6f %s", node.getId(),
-				node.getLatitude(), node.getLongitude(),
-				Joiner.on(", ").join(Lists.transform(tags, converter))));
+				node.getLatitude(), node.getLongitude(), formatTags(node)));
 
-		if (isSelected) {
-			setBackground(list.getSelectionBackground());
-			setForeground(list.getSelectionForeground());
-		} else {
-			setBackground(list.getBackground());
-			setForeground(list.getForeground());
-		}
+		setBackground(list, isSelected);
 
 		return this;
 	}
