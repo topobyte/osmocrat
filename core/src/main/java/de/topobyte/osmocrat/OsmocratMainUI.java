@@ -20,6 +20,10 @@ package de.topobyte.osmocrat;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,6 +37,7 @@ import com.slimjars.dist.gnu.trove.list.array.TLongArrayList;
 
 import de.topobyte.awt.util.GridBagConstraintsEditor;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
+import de.topobyte.osm4j.core.model.iface.OsmEntity;
 import de.topobyte.osm4j.core.model.iface.OsmNode;
 import de.topobyte.osm4j.core.model.iface.OsmRelation;
 import de.topobyte.osm4j.core.model.iface.OsmRelationMember;
@@ -40,6 +45,7 @@ import de.topobyte.osm4j.core.model.iface.OsmWay;
 import de.topobyte.osm4j.core.model.impl.Node;
 import de.topobyte.osm4j.core.model.impl.Relation;
 import de.topobyte.osm4j.core.model.impl.Way;
+import de.topobyte.osm4j.core.model.util.OsmModelUtil;
 import de.topobyte.osmocrat.list.EntityModel;
 import de.topobyte.osmocrat.list.NodeCellRenderer;
 import de.topobyte.osmocrat.list.RelationCellRenderer;
@@ -49,6 +55,10 @@ public class OsmocratMainUI
 {
 
 	private InMemoryListDataSet data;
+
+	private JList<OsmNode> listNodes;
+	private JList<OsmWay> listWays;
+	private JList<OsmRelation> listRelations;
 
 	public OsmocratMainUI(InMemoryListDataSet data)
 	{
@@ -62,8 +72,8 @@ public class OsmocratMainUI
 
 		// Nodes
 
-		JList<OsmNode> listNodes = new JList<>(
-				new EntityModel<>(data.getNodes()));
+		EntityModel<OsmNode> modelNodes = new EntityModel<>(data.getNodes());
+		listNodes = new JList<>(modelNodes);
 		JScrollPane jspNodes = new JScrollPane(listNodes);
 
 		listNodes.setCellRenderer(new NodeCellRenderer());
@@ -71,7 +81,8 @@ public class OsmocratMainUI
 
 		// Ways
 
-		JList<OsmWay> listWays = new JList<>(new EntityModel<>(data.getWays()));
+		EntityModel<OsmWay> modelWays = new EntityModel<>(data.getWays());
+		listWays = new JList<>(modelWays);
 		JScrollPane jspWays = new JScrollPane(listWays);
 
 		listWays.setCellRenderer(new WayCellRenderer());
@@ -79,8 +90,9 @@ public class OsmocratMainUI
 
 		// Relations
 
-		JList<OsmRelation> listRelations = new JList<>(
-				new EntityModel<>(data.getRelations()));
+		EntityModel<OsmRelation> modelRelations = new EntityModel<>(
+				data.getRelations());
+		listRelations = new JList<>(modelRelations);
 		JScrollPane jspRelations = new JScrollPane(listRelations);
 
 		listRelations.setCellRenderer(new RelationCellRenderer());
@@ -131,7 +143,68 @@ public class OsmocratMainUI
 		c.gridPos(1, 0).weight(0, 0).fill(GridBagConstraints.NONE);
 		filter.add(button, c.getConstraints());
 
+		button.addActionListener(e -> filter(input.getText()));
+
 		return filter;
+	}
+
+	private void set(List<OsmNode> nodes, List<OsmWay> ways,
+			List<OsmRelation> relations)
+	{
+		EntityModel<OsmNode> modelNodes = new EntityModel<>(nodes);
+		listNodes.setModel(modelNodes);
+
+		EntityModel<OsmWay> modelWays = new EntityModel<>(ways);
+		listWays.setModel(modelWays);
+
+		EntityModel<OsmRelation> modelRelations = new EntityModel<>(relations);
+		listRelations.setModel(modelRelations);
+	}
+
+	private void filter(String text)
+	{
+		String trimmed = text.trim();
+		if (trimmed.isEmpty()) {
+			noFilter();
+			return;
+		}
+		Pattern pattern = Pattern.compile("(.*)=(.*)");
+		Matcher matcher = pattern.matcher(text);
+		if (matcher.matches()) {
+			String key = matcher.group(1).trim();
+			String value = matcher.group(2).trim();
+			filter(key, value);
+		}
+	}
+
+	private void noFilter()
+	{
+		set(data.getNodes(), data.getWays(), data.getRelations());
+	}
+
+	private void filter(String key, String value)
+	{
+		List<OsmNode> nodes = filter(data.getNodes(), key, value);
+		List<OsmWay> ways = filter(data.getWays(), key, value);
+		List<OsmRelation> relations = filter(data.getRelations(), key, value);
+		set(nodes, ways, relations);
+	}
+
+	private <T extends OsmEntity> List<T> filter(List<T> unfiltered, String key,
+			String value)
+	{
+		List<T> filtered = new ArrayList<>();
+		for (T element : unfiltered) {
+			Map<String, String> tags = OsmModelUtil.getTagsAsMap(element);
+			String keyValue = tags.get(key);
+			if (keyValue == null) {
+				continue;
+			}
+			if (keyValue.equals(value)) {
+				filtered.add(element);
+			}
+		}
+		return filtered;
 	}
 
 }
