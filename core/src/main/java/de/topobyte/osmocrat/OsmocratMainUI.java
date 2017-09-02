@@ -17,15 +17,19 @@
 
 package de.topobyte.osmocrat;
 
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
 import com.slimjars.dist.gnu.trove.list.array.TLongArrayList;
 
+import de.topobyte.awt.util.GridBagConstraintsEditor;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.model.iface.OsmNode;
 import de.topobyte.osm4j.core.model.iface.OsmRelation;
@@ -84,11 +88,21 @@ public class OsmocratMainUI
 		// Setup tabbed pane
 
 		JTabbedPane tabbed = new JTabbedPane();
-		frame.setContentPane(tabbed);
 
 		tabbed.add("nodes", jspNodes);
 		tabbed.add("ways", jspWays);
 		tabbed.add("relations", jspRelations);
+
+		// Main layout
+
+		JPanel main = new JPanel(new GridBagLayout());
+		frame.setContentPane(main);
+
+		GridBagConstraintsEditor c = new GridBagConstraintsEditor();
+		c.gridPos(0, 0).weight(1, 1).fill(GridBagConstraints.BOTH);
+		main.add(tabbed, c.getConstraints());
+
+		// Show frame
 
 		frame.setSize(800, 600);
 		frame.setVisible(true);
