@@ -21,11 +21,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 
 import com.slimjars.dist.gnu.trove.list.array.TLongArrayList;
 
@@ -93,19 +95,43 @@ public class OsmocratMainUI
 		tabbed.add("ways", jspWays);
 		tabbed.add("relations", jspRelations);
 
+		// Filter panel
+
+		JPanel filter = filterPanel();
+
 		// Main layout
 
 		JPanel main = new JPanel(new GridBagLayout());
 		frame.setContentPane(main);
 
 		GridBagConstraintsEditor c = new GridBagConstraintsEditor();
-		c.gridPos(0, 0).weight(1, 1).fill(GridBagConstraints.BOTH);
+
+		c.gridPos(0, 0).weight(1, 0).fill(GridBagConstraints.HORIZONTAL);
+		main.add(filter, c.getConstraints());
+
+		c.gridPos(0, 1).weight(1, 1).fill(GridBagConstraints.BOTH);
 		main.add(tabbed, c.getConstraints());
 
 		// Show frame
 
 		frame.setSize(800, 600);
 		frame.setVisible(true);
+	}
+
+	private JPanel filterPanel()
+	{
+		JPanel filter = new JPanel(new GridBagLayout());
+		GridBagConstraintsEditor c = new GridBagConstraintsEditor();
+
+		JTextField input = new JTextField();
+		JButton button = new JButton("filter");
+
+		c.gridPos(0, 0).weight(1, 0).fill(GridBagConstraints.HORIZONTAL);
+		filter.add(input, c.getConstraints());
+		c.gridPos(1, 0).weight(0, 0).fill(GridBagConstraints.NONE);
+		filter.add(button, c.getConstraints());
+
+		return filter;
 	}
 
 }
