@@ -21,34 +21,15 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-
-import javax.swing.JFrame;
-import javax.swing.JList;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 
-import com.slimjars.dist.gnu.trove.list.array.TLongArrayList;
-
 import de.topobyte.osm4j.core.access.OsmIterator;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.dataset.ListDataSetLoader;
-import de.topobyte.osm4j.core.model.iface.OsmNode;
-import de.topobyte.osm4j.core.model.iface.OsmRelation;
-import de.topobyte.osm4j.core.model.iface.OsmRelationMember;
-import de.topobyte.osm4j.core.model.iface.OsmWay;
-import de.topobyte.osm4j.core.model.impl.Node;
-import de.topobyte.osm4j.core.model.impl.Relation;
-import de.topobyte.osm4j.core.model.impl.Way;
 import de.topobyte.osm4j.utils.FileFormat;
 import de.topobyte.osm4j.utils.OsmIoUtils;
-import de.topobyte.osmocrat.list.EntityModel;
-import de.topobyte.osmocrat.list.NodeCellRenderer;
-import de.topobyte.osmocrat.list.RelationCellRenderer;
-import de.topobyte.osmocrat.list.WayCellRenderer;
 import de.topobyte.utilities.apache.commons.cli.OptionHelper;
 import de.topobyte.utilities.apache.commons.cli.commands.args.CommonsCliArguments;
 import de.topobyte.utilities.apache.commons.cli.commands.options.CommonsCliExeOptions;
@@ -92,47 +73,8 @@ public class OsmocratGui
 						data.getNodes().size(), data.getWays().size(),
 						data.getRelations().size()));
 
-		JFrame frame = new JFrame("Osmocrat");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		// Nodes
-
-		JList<OsmNode> listNodes = new JList<>(
-				new EntityModel<>(data.getNodes()));
-		JScrollPane jspNodes = new JScrollPane(listNodes);
-
-		listNodes.setCellRenderer(new NodeCellRenderer());
-		listNodes.setPrototypeCellValue(new Node(1, 2, 3));
-
-		// Ways
-
-		JList<OsmWay> listWays = new JList<>(new EntityModel<>(data.getWays()));
-		JScrollPane jspWays = new JScrollPane(listWays);
-
-		listWays.setCellRenderer(new WayCellRenderer());
-		listWays.setPrototypeCellValue(new Way(1, new TLongArrayList()));
-
-		// Relations
-
-		JList<OsmRelation> listRelations = new JList<>(
-				new EntityModel<>(data.getRelations()));
-		JScrollPane jspRelations = new JScrollPane(listRelations);
-
-		listRelations.setCellRenderer(new RelationCellRenderer());
-		listRelations.setPrototypeCellValue(
-				new Relation(1, new ArrayList<OsmRelationMember>()));
-
-		// Setup tabbed pane
-
-		JTabbedPane tabbed = new JTabbedPane();
-		frame.setContentPane(tabbed);
-
-		tabbed.add("nodes", jspNodes);
-		tabbed.add("ways", jspWays);
-		tabbed.add("relations", jspRelations);
-
-		frame.setSize(800, 600);
-		frame.setVisible(true);
+		OsmocratMainUI mainUI = new OsmocratMainUI(data);
+		mainUI.show();
 	}
 
 }
