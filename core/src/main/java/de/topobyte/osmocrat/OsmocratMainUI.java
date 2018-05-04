@@ -30,10 +30,13 @@ import java.util.regex.Pattern;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import com.slimjars.dist.gnu.trove.list.array.TLongArrayList;
 
@@ -85,6 +88,7 @@ public class OsmocratMainUI
 		listNodes.setPrototypeCellValue(new Node(1, 2, 3));
 
 		addDoubleClickListener(listNodes);
+		addRightClickListener(listNodes);
 
 		// Ways
 
@@ -96,6 +100,7 @@ public class OsmocratMainUI
 		listWays.setPrototypeCellValue(new Way(1, new TLongArrayList()));
 
 		addDoubleClickListener(listWays);
+		addRightClickListener(listWays);
 
 		// Relations
 
@@ -109,6 +114,7 @@ public class OsmocratMainUI
 				new Relation(1, new ArrayList<OsmRelationMember>()));
 
 		addDoubleClickListener(listRelations);
+		addRightClickListener(listRelations);
 
 		// Setup tabbed pane
 
@@ -230,14 +236,48 @@ public class OsmocratMainUI
 					return;
 				}
 				if (e.getClickCount() == 2) {
-					ElementXmlDialog dialog = new ElementXmlDialog(frame,
-							element);
-					dialog.setSize(500, 400);
-					dialog.setVisible(true);
+					showElementDialog(element);
 				}
 			}
 
 		});
+	}
+
+	private <T extends OsmEntity> void addRightClickListener(JList<T> list)
+	{
+		list.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				OsmEntity element = list.getSelectedValue();
+				if (element == null) {
+					return;
+				}
+				if (!SwingUtilities.isRightMouseButton(e)) {
+					return;
+				}
+
+				JPopupMenu popup = new JPopupMenu();
+
+				JMenuItem itemInfo = new JMenuItem("info");
+				popup.add(itemInfo);
+
+				itemInfo.addActionListener(event -> {
+					showElementDialog(element);
+				});
+
+				popup.show(list, e.getX(), e.getY());
+			}
+
+		});
+	}
+
+	protected void showElementDialog(OsmEntity element)
+	{
+		ElementXmlDialog dialog = new ElementXmlDialog(frame, element);
+		dialog.setSize(500, 400);
+		dialog.setVisible(true);
 	}
 
 }
