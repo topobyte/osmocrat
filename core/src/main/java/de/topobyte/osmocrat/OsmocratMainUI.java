@@ -19,6 +19,8 @@ package de.topobyte.osmocrat;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +48,7 @@ import de.topobyte.osm4j.core.model.impl.Node;
 import de.topobyte.osm4j.core.model.impl.Relation;
 import de.topobyte.osm4j.core.model.impl.Way;
 import de.topobyte.osm4j.core.model.util.OsmModelUtil;
+import de.topobyte.osmocrat.element.ElementXmlDialog;
 import de.topobyte.osmocrat.list.EntityModel;
 import de.topobyte.osmocrat.list.NodeCellRenderer;
 import de.topobyte.osmocrat.list.RelationCellRenderer;
@@ -53,6 +56,8 @@ import de.topobyte.osmocrat.list.WayCellRenderer;
 
 public class OsmocratMainUI
 {
+
+	private JFrame frame;
 
 	private InMemoryListDataSet data;
 
@@ -67,7 +72,7 @@ public class OsmocratMainUI
 
 	public void show()
 	{
-		JFrame frame = new JFrame("Osmocrat");
+		frame = new JFrame("Osmocrat");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// Nodes
@@ -79,6 +84,8 @@ public class OsmocratMainUI
 		listNodes.setCellRenderer(new NodeCellRenderer());
 		listNodes.setPrototypeCellValue(new Node(1, 2, 3));
 
+		addDoubleClickListener(listNodes);
+
 		// Ways
 
 		EntityModel<OsmWay> modelWays = new EntityModel<>(data.getWays());
@@ -87,6 +94,8 @@ public class OsmocratMainUI
 
 		listWays.setCellRenderer(new WayCellRenderer());
 		listWays.setPrototypeCellValue(new Way(1, new TLongArrayList()));
+
+		addDoubleClickListener(listWays);
 
 		// Relations
 
@@ -98,6 +107,8 @@ public class OsmocratMainUI
 		listRelations.setCellRenderer(new RelationCellRenderer());
 		listRelations.setPrototypeCellValue(
 				new Relation(1, new ArrayList<OsmRelationMember>()));
+
+		addDoubleClickListener(listRelations);
 
 		// Setup tabbed pane
 
@@ -205,6 +216,28 @@ public class OsmocratMainUI
 			}
 		}
 		return filtered;
+	}
+
+	private <T extends OsmEntity> void addDoubleClickListener(JList<T> list)
+	{
+		list.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseClicked(MouseEvent e)
+			{
+				OsmEntity element = list.getSelectedValue();
+				if (element == null) {
+					return;
+				}
+				if (e.getClickCount() == 2) {
+					ElementXmlDialog dialog = new ElementXmlDialog(frame,
+							element);
+					dialog.setSize(500, 400);
+					dialog.setVisible(true);
+				}
+			}
+
+		});
 	}
 
 }
