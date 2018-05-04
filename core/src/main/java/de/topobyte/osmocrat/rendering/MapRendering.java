@@ -40,6 +40,7 @@ import java.util.Set;
 import javax.swing.JPanel;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
@@ -121,7 +122,9 @@ public class MapRendering extends JPanel
 
 		});
 
+		System.out.println("building rendering data...");
 		buildRenderingData();
+		System.out.println("done");
 	}
 
 	private void buildRenderingData()
@@ -136,14 +139,21 @@ public class MapRendering extends JPanel
 		EntityFinder wayFinder = EntityFinders.create(data,
 				EntityNotFoundStrategy.IGNORE);
 
+		Envelope envelope = bbox.toEnvelope();
+
+		System.out.println("building relations...");
 		// Collect buildings from relation areas...
 		for (OsmRelation relation : data.getRelations()) {
 			Map<String, String> tags = OsmModelUtil.getTagsAsMap(relation);
 			if (tags.containsKey("building")) {
 				MultiPolygon area = getPolygon(relation);
-				if (area != null) {
-					buildings.add(area);
+				if (area == null) {
+					continue;
 				}
+				if (!envelope.intersects(area.getEnvelopeInternal())) {
+					continue;
+				}
+				buildings.add(area);
 				try {
 					wayFinder.findMemberWays(relation, buildingRelationWays);
 				} catch (EntityNotFoundException e) {
@@ -151,6 +161,7 @@ public class MapRendering extends JPanel
 				}
 			}
 		}
+		System.out.println("building ways...");
 		// ... and also from way areas
 		for (OsmWay way : data.getWays()) {
 			if (buildingRelationWays.contains(way)) {
@@ -159,12 +170,17 @@ public class MapRendering extends JPanel
 			Map<String, String> tags = OsmModelUtil.getTagsAsMap(way);
 			if (tags.containsKey("building")) {
 				MultiPolygon area = getPolygon(way);
-				if (area != null) {
-					buildings.add(area);
+				if (area == null) {
+					continue;
 				}
+				if (!envelope.intersects(area.getEnvelopeInternal())) {
+					continue;
+				}
+				buildings.add(area);
 			}
 		}
 
+		System.out.println("building streets...");
 		// Collect streets
 		for (OsmWay way : data.getWays()) {
 			Map<String, String> tags = OsmModelUtil.getTagsAsMap(way);
@@ -182,6 +198,9 @@ public class MapRendering extends JPanel
 
 			// Okay, this is a valid street
 			for (LineString path : paths) {
+				if (!envelope.intersects(path.getEnvelopeInternal())) {
+					continue;
+				}
 				streets.add(path);
 			}
 
@@ -191,6 +210,9 @@ public class MapRendering extends JPanel
 				continue;
 			}
 			for (LineString path : paths) {
+				if (!envelope.intersects(path.getEnvelopeInternal())) {
+					continue;
+				}
 				names.put(path, name);
 			}
 		}
