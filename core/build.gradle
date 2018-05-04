@@ -4,9 +4,9 @@ if (project.hasProperty("topobyte")) {
 }
 
 dependencies {
-    compile 'de.topobyte:osm4j-utils:0.1.0'
+    compile 'de.topobyte:osm4j-utils:0.1.2'
     compile 'de.topobyte:awt-utils:0.0.3'
-    compile 'de.topobyte:swing-utils:0.0.10'
+    compile 'de.topobyte:swing-utils:0.0.11'
 }
 
 def pomInfo = new XmlSlurper().parse(new File(projectDir, 'info.pom'));
