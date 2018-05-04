@@ -7,6 +7,8 @@ dependencies {
     compile 'de.topobyte:osm4j-utils:0.1.2'
     compile 'de.topobyte:awt-utils:0.0.3'
     compile 'de.topobyte:swing-utils:0.0.11'
+    compile 'de.topobyte:jts2awt:0.0.1'
+    compile 'de.topobyte:mercator-image:0.0.4'
 }
 
 def pomInfo = new XmlSlurper().parse(new File(projectDir, 'info.pom'));

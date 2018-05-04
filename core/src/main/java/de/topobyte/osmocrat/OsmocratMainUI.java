@@ -73,6 +73,11 @@ public class OsmocratMainUI
 		this.data = data;
 	}
 
+	public InMemoryListDataSet getData()
+	{
+		return data;
+	}
+
 	public void show()
 	{
 		frame = new JFrame("Osmocrat");

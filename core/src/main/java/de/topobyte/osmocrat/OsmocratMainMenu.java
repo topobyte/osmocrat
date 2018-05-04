@@ -23,6 +23,7 @@ import javax.swing.JMenuItem;
 
 import de.topobyte.osmocrat.action.AboutAction;
 import de.topobyte.osmocrat.action.ExitAction;
+import de.topobyte.osmocrat.action.RenderMapAction;
 
 public class OsmocratMainMenu extends JMenuBar
 {
@@ -35,6 +36,7 @@ public class OsmocratMainMenu extends JMenuBar
 		add(menuFile);
 
 		menuFile.add(new JMenuItem(new ExitAction(osmocrat)));
+		menuFile.add(new JMenuItem(new RenderMapAction(osmocrat)));
 
 		JMenu menuHelp = new JMenu("Help");
 		add(menuHelp);
