@@ -57,7 +57,6 @@ public class RenderMapAction extends OsmocratAction
 
 		JFrame frame = new JFrame("Osmocrat Map");
 		frame.setContentPane(panel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
 	}
