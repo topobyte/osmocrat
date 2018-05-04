@@ -78,6 +78,9 @@ public class OsmocratMainUI
 		frame = new JFrame("Osmocrat");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		OsmocratMainMenu menu = new OsmocratMainMenu(this);
+		frame.setJMenuBar(menu);
+
 		// Nodes
 
 		EntityModel<OsmNode> modelNodes = new EntityModel<>(data.getNodes());
