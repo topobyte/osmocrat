@@ -36,7 +36,11 @@ public class OsmocratMainMenu extends JMenuBar
 		add(menuFile);
 
 		menuFile.add(new JMenuItem(new ExitAction(osmocrat)));
-		menuFile.add(new JMenuItem(new RenderMapAction(osmocrat)));
+
+		JMenu menuTools = new JMenu("Tools");
+		add(menuTools);
+
+		menuTools.add(new JMenuItem(new RenderMapAction(osmocrat)));
 
 		JMenu menuHelp = new JMenu("Help");
 		add(menuHelp);
