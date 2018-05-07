@@ -22,7 +22,6 @@ import java.awt.Color;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -47,6 +46,7 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiPolygon;
 
 import de.topobyte.adt.geo.BBox;
+import de.topobyte.awt.util.GraphicsUtil;
 import de.topobyte.jgs.transform.CoordinateTransformer;
 import de.topobyte.jts2awt.Jts2Awt;
 import de.topobyte.mercator.image.MercatorImage;
@@ -228,8 +228,7 @@ public class MapRenderer extends JPanel
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		GraphicsUtil.useAntialiasing(g, true);
 
 		// Fill the background
 		g.setColor(cBackground);
