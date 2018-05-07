@@ -31,7 +31,7 @@ import de.topobyte.osm4j.core.access.OsmReader;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.dataset.ListDataSetLoader;
 import de.topobyte.osm4j.xml.dynsax.OsmXmlReader;
-import de.topobyte.osmocrat.rendering.MapRendering;
+import de.topobyte.osmocrat.rendering.MapRenderer;
 
 public class TestMapRendering
 {
@@ -58,7 +58,7 @@ public class TestMapRendering
 
 		MercatorImage mapImage = new MercatorImage(bbox, width, height);
 
-		MapRendering panel = new MapRendering(bbox, mapImage, data);
+		MapRenderer panel = new MapRenderer(bbox, mapImage, data);
 		panel.setPreferredSize(new Dimension(width, height));
 
 		JFrame frame = new JFrame("Osmocrat Map");

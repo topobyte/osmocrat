@@ -63,7 +63,7 @@ import de.topobyte.osm4j.geometry.RegionBuilderResult;
 import de.topobyte.osm4j.geometry.WayBuilder;
 import de.topobyte.osm4j.geometry.WayBuilderResult;
 
-public class MapRendering extends JPanel
+public class MapRenderer extends JPanel
 {
 
 	private static final long serialVersionUID = 1L;
@@ -102,7 +102,7 @@ public class MapRendering extends JPanel
 	private List<LineString> streets = new ArrayList<>();
 	private Map<LineString, String> names = new HashMap<>();
 
-	public MapRendering(BBox bbox, MercatorImage mercatorImage,
+	public MapRenderer(BBox bbox, MercatorImage mercatorImage,
 			InMemoryListDataSet data)
 	{
 		this.bbox = bbox;

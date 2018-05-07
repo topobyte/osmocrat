@@ -26,7 +26,7 @@ import de.topobyte.adt.geo.BBox;
 import de.topobyte.adt.geo.Coordinate;
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osmocrat.OsmocratMainUI;
-import de.topobyte.osmocrat.rendering.MapRendering;
+import de.topobyte.osmocrat.rendering.MapRenderer;
 import de.topobyte.swing.util.EmptyIcon;
 
 public class RenderMapAction extends OsmocratAction
@@ -58,7 +58,7 @@ public class RenderMapAction extends OsmocratAction
 
 		MercatorImage mapImage = new MercatorImage(bbox, width, height);
 
-		MapRendering panel = new MapRendering(bbox, mapImage,
+		MapRenderer panel = new MapRenderer(bbox, mapImage,
 				osmocrat.getData());
 
 		panel.setPreferredSize(new Dimension(width, height));
