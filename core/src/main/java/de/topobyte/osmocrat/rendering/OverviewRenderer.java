@@ -44,7 +44,6 @@ public class OverviewRenderer extends JPanel
 
 	private static final long serialVersionUID = 1L;
 
-	// Some fields that define the map colors and street line widths
 	private Color cBackground = new Color(0xEEEEEE);
 	private Color cNodes = Color.BLACK;
 	private Color cBBox = Color.BLUE;;
