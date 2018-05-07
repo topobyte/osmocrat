@@ -41,7 +41,9 @@ import javax.swing.SwingUtilities;
 import com.slimjars.dist.gnu.trove.list.TDoubleList;
 import com.slimjars.dist.gnu.trove.list.array.TDoubleArrayList;
 import com.slimjars.dist.gnu.trove.list.array.TLongArrayList;
+import com.vividsolutions.jts.geom.Envelope;
 
+import de.topobyte.adt.geo.BBox;
 import de.topobyte.adt.geo.Coordinate;
 import de.topobyte.awt.util.GridBagConstraintsEditor;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
@@ -71,6 +73,7 @@ public class OsmocratMainUI
 	private JList<OsmWay> listWays;
 	private JList<OsmRelation> listRelations;
 
+	private BBox bbox = null;
 	private Coordinate meanNodes = null;
 
 	public OsmocratMainUI(InMemoryListDataSet data)
@@ -293,12 +296,32 @@ public class OsmocratMainUI
 		dialog.setVisible(true);
 	}
 
+	public BBox getBoundingBox()
+	{
+		if (bbox == null) {
+			calculateBoudingBox();
+		}
+		return bbox;
+	}
+
 	public Coordinate getNodeMedian()
 	{
 		if (meanNodes == null) {
 			calculateNodeMedian();
 		}
 		return meanNodes;
+	}
+
+	private void calculateBoudingBox()
+	{
+		List<OsmNode> nodes = data.getNodes();
+
+		Envelope envelope = new Envelope();
+		for (OsmNode node : nodes) {
+			envelope.expandToInclude(node.getLongitude(), node.getLatitude());
+		}
+
+		bbox = new BBox(envelope);
 	}
 
 	public void calculateNodeMedian()
