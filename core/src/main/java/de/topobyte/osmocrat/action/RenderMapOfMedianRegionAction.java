@@ -29,14 +29,15 @@ import de.topobyte.osmocrat.OsmocratMainUI;
 import de.topobyte.osmocrat.rendering.MapRenderer;
 import de.topobyte.swing.util.EmptyIcon;
 
-public class RenderMapAction extends OsmocratAction
+public class RenderMapOfMedianRegionAction extends OsmocratAction
 {
 
 	private static final long serialVersionUID = 1L;
 
-	public RenderMapAction(OsmocratMainUI osmocrat)
+	public RenderMapOfMedianRegionAction(OsmocratMainUI osmocrat)
 	{
-		super(osmocrat, "Render Map", "Render a map");
+		super(osmocrat, "Render Median Area",
+				"Render a map showing the median region");
 		setIcon(new EmptyIcon(24));
 	}
 
@@ -58,8 +59,7 @@ public class RenderMapAction extends OsmocratAction
 
 		MercatorImage mapImage = new MercatorImage(bbox, width, height);
 
-		MapRenderer panel = new MapRenderer(bbox, mapImage,
-				osmocrat.getData());
+		MapRenderer panel = new MapRenderer(bbox, mapImage, osmocrat.getData());
 
 		panel.setPreferredSize(new Dimension(width, height));
 
