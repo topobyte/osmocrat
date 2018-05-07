@@ -17,16 +17,14 @@
 
 package de.topobyte.osmocrat.action;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JFrame;
 
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.adt.geo.Coordinate;
-import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osmocrat.OsmocratMainUI;
-import de.topobyte.osmocrat.rendering.MapRenderer;
+import de.topobyte.osmocrat.rendersetup.RenderSetupPanel;
 import de.topobyte.swing.util.EmptyIcon;
 
 public class RenderMapAction extends OsmocratAction
@@ -56,15 +54,12 @@ public class RenderMapAction extends OsmocratAction
 		int width = 800;
 		int height = 600;
 
-		MercatorImage mapImage = new MercatorImage(bbox, width, height);
+		JFrame frame = new JFrame("Render Map...");
+		frame.setSize(600, 500);
 
-		MapRenderer panel = new MapRenderer(bbox, mapImage, osmocrat.getData());
+		RenderSetupPanel panel = new RenderSetupPanel(bbox, width, height);
 
-		panel.setPreferredSize(new Dimension(width, height));
-
-		JFrame frame = new JFrame("Osmocrat Map");
 		frame.setContentPane(panel);
-		frame.pack();
 		frame.setVisible(true);
 	}
 
