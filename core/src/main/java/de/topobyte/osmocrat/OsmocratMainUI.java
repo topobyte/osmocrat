@@ -38,8 +38,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import com.slimjars.dist.gnu.trove.list.TDoubleList;
+import com.slimjars.dist.gnu.trove.list.array.TDoubleArrayList;
 import com.slimjars.dist.gnu.trove.list.array.TLongArrayList;
 
+import de.topobyte.adt.geo.Coordinate;
 import de.topobyte.awt.util.GridBagConstraintsEditor;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.model.iface.OsmEntity;
@@ -67,6 +70,8 @@ public class OsmocratMainUI
 	private JList<OsmNode> listNodes;
 	private JList<OsmWay> listWays;
 	private JList<OsmRelation> listRelations;
+
+	private Coordinate meanNodes = null;
 
 	public OsmocratMainUI(InMemoryListDataSet data)
 	{
@@ -286,6 +291,35 @@ public class OsmocratMainUI
 		ElementXmlDialog dialog = new ElementXmlDialog(frame, element);
 		dialog.setSize(500, 400);
 		dialog.setVisible(true);
+	}
+
+	public Coordinate getNodeMedian()
+	{
+		if (meanNodes == null) {
+			calculateNodeMedian();
+		}
+		return meanNodes;
+	}
+
+	public void calculateNodeMedian()
+	{
+		List<OsmNode> nodes = data.getNodes();
+
+		TDoubleList lats = new TDoubleArrayList(nodes.size());
+		TDoubleList lons = new TDoubleArrayList(nodes.size());
+
+		for (OsmNode node : nodes) {
+			lats.add(node.getLatitude());
+			lons.add(node.getLongitude());
+		}
+
+		lats.sort();
+		lons.sort();
+
+		double meanLat = lats.get(lats.size() / 2);
+		double meanLon = lons.get(lons.size() / 2);
+
+		meanNodes = new Coordinate(meanLon, meanLat);
 	}
 
 }

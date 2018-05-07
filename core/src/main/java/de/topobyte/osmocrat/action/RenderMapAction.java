@@ -23,6 +23,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 
 import de.topobyte.adt.geo.BBox;
+import de.topobyte.adt.geo.Coordinate;
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osmocrat.OsmocratMainUI;
 import de.topobyte.osmocrat.rendering.MapRendering;
@@ -42,9 +43,16 @@ public class RenderMapAction extends OsmocratAction
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		// TODO: do not use hard-coded bounding box
-		BBox bbox = new BBox(14.326000213623047, 51.76805235190213,
-				14.339561462402344, 51.760788151739106);
+		Coordinate median = osmocrat.getNodeMedian();
+
+		double dLon = 0.013;
+		double dLat = 0.007;
+
+		BBox bbox = new BBox(median.getLongitude() - dLon / 2,
+				median.getLatitude() + dLat / 2,
+				median.getLongitude() + dLon / 2,
+				median.getLatitude() - dLat / 2);
+
 		int width = 800;
 		int height = 600;
 
