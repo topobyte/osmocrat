@@ -33,6 +33,8 @@ import de.topobyte.adt.geo.BBox;
 import de.topobyte.jeography.tools.bboxaction.BboxPanel;
 import de.topobyte.jeography.tools.bboxaction.PanelButton;
 import de.topobyte.jeography.tools.bboxaction.SelectBboxAction;
+import de.topobyte.jeography.viewer.util.Borders;
+import de.topobyte.swing.util.ComponentPanel;
 import de.topobyte.swing.util.DocumentAdapter;
 
 public class SetupPanel extends JPanel
@@ -45,7 +47,7 @@ public class SetupPanel extends JPanel
 	private int height = 0;
 
 	private SelectBboxAction selectBboxAction;
-	private JTextField fieldWidth, fieldHeight;
+	private ComponentPanel<JTextField> fieldWidth, fieldHeight;
 
 	public SetupPanel(BBox boundingBox, int width, int height)
 	{
@@ -123,7 +125,8 @@ public class SetupPanel extends JPanel
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		panel.add(label, c);
 
-		JTextField field = new JTextField("1.0");
+		ComponentPanel<JTextField> field = new ComponentPanel<>(
+				new JTextField("1.0"));
 		c.gridy = 1;
 		c.gridwidth = 1;
 		panel.add(field, c);
@@ -133,7 +136,7 @@ public class SetupPanel extends JPanel
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		panel.add(labelWidth, c);
 
-		fieldWidth = new JTextField("" + width);
+		fieldWidth = new ComponentPanel<>(new JTextField("" + width));
 		c.gridy = 3;
 		c.gridwidth = 1;
 		panel.add(fieldWidth, c);
@@ -143,38 +146,50 @@ public class SetupPanel extends JPanel
 		c.gridwidth = GridBagConstraints.REMAINDER;
 		panel.add(labelHeight, c);
 
-		fieldHeight = new JTextField("" + height);
+		fieldHeight = new ComponentPanel<>(new JTextField("" + height));
 		c.gridy = 5;
 		c.gridwidth = 1;
 		panel.add(fieldHeight, c);
 
-		fieldWidth.getDocument().addDocumentListener(new DocumentAdapter() {
+		field.getComponent().setBorder(Borders.validityBorder(true));
+		fieldWidth.getComponent().setBorder(Borders.validityBorder(true));
+		fieldHeight.getComponent().setBorder(Borders.validityBorder(true));
 
-			@Override
-			public void update(DocumentEvent e)
-			{
-				String text = fieldWidth.getText();
-				try {
-					width = Integer.parseInt(text);
-				} catch (NumberFormatException ex) {
-					// TODO: set red border
-				}
-			}
-		});
+		fieldWidth.getComponent().getDocument()
+				.addDocumentListener(new DocumentAdapter() {
 
-		fieldHeight.getDocument().addDocumentListener(new DocumentAdapter() {
+					@Override
+					public void update(DocumentEvent e)
+					{
+						String text = fieldWidth.getComponent().getText();
+						boolean valid = true;
+						try {
+							width = Integer.parseInt(text);
+						} catch (NumberFormatException ex) {
+							valid = false;
+						}
+						fieldWidth.getComponent()
+								.setBorder(Borders.validityBorder(valid));
+					}
+				});
 
-			@Override
-			public void update(DocumentEvent e)
-			{
-				String text = fieldHeight.getText();
-				try {
-					height = Integer.parseInt(text);
-				} catch (NumberFormatException ex) {
-					// TODO: set red border
-				}
-			}
-		});
+		fieldHeight.getComponent().getDocument()
+				.addDocumentListener(new DocumentAdapter() {
+
+					@Override
+					public void update(DocumentEvent e)
+					{
+						String text = fieldHeight.getComponent().getText();
+						boolean valid = true;
+						try {
+							height = Integer.parseInt(text);
+						} catch (NumberFormatException ex) {
+							valid = false;
+						}
+						fieldHeight.getComponent()
+								.setBorder(Borders.validityBorder(valid));
+					}
+				});
 
 		return panel;
 	}
