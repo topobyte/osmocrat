@@ -38,6 +38,7 @@ public class Rendering
 
 		addArea(ri, "building", new ColorCode(0xFFC2C2));
 
+		addWay(ri, "highway", "trunk", 6, 10, WHITE.color(), GRAY.color());
 		addWay(ri, "highway", "primary", 6, 10, WHITE.color(), GRAY.color());
 		addWay(ri, "highway", "secondary", 6, 10, WHITE.color(), GRAY.color());
 		addWay(ri, "highway", "tertiary", 6, 10, WHITE.color(), GRAY.color());
@@ -55,12 +56,14 @@ public class Rendering
 
 		addArea(ri, "building", new ColorCode(0xFFC2C2));
 
+		addWay(ri, "highway", "trunk", 10, GRAY.color());
 		addWay(ri, "highway", "primary", 10, GRAY.color());
 		addWay(ri, "highway", "secondary", 10, GRAY.color());
 		addWay(ri, "highway", "tertiary", 10, GRAY.color());
 		addWay(ri, "highway", "residential", 10, GRAY.color());
 		addWay(ri, "highway", "living_street", 10, GRAY.color());
 
+		addWay(ri, "highway", "trunk", 6, WHITE.color());
 		addWay(ri, "highway", "primary", 6, WHITE.color());
 		addWay(ri, "highway", "secondary", 6, WHITE.color());
 		addWay(ri, "highway", "tertiary", 6, WHITE.color());
@@ -76,10 +79,12 @@ public class Rendering
 
 		addArea(ri, "waterway", "riverbank", new ColorCode(0xaad3de));
 
+		addWay(ri, "highway", "trunk", 10, GRAY.color());
 		addWay(ri, "highway", "primary", 10, GRAY.color());
 		addWay(ri, "highway", "secondary", 10, GRAY.color());
 		addWay(ri, "highway", "tertiary", 10, GRAY.color());
 
+		addWay(ri, "highway", "trunk", 6, WHITE.color());
 		addWay(ri, "highway", "primary", 6, WHITE.color());
 		addWay(ri, "highway", "secondary", 6, WHITE.color());
 		addWay(ri, "highway", "tertiary", 6, WHITE.color());
