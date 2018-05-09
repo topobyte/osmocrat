@@ -24,6 +24,7 @@ import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.selector.KeySelector;
 import de.topobyte.osmocrat.rendering.config.selector.TagSelector;
@@ -46,6 +47,34 @@ public class Rendering
 				GRAY.color());
 
 		return ri;
+	}
+
+	public static RenderInstructions style2()
+	{
+		RenderInstructions ri = new RenderInstructions();
+
+		addArea(ri, "building", new ColorCode(0xFFC2C2));
+
+		addWay(ri, "highway", "primary", 10, GRAY.color());
+		addWay(ri, "highway", "secondary", 10, GRAY.color());
+		addWay(ri, "highway", "tertiary", 10, GRAY.color());
+		addWay(ri, "highway", "residential", 10, GRAY.color());
+		addWay(ri, "highway", "living_street", 10, GRAY.color());
+
+		addWay(ri, "highway", "primary", 6, WHITE.color());
+		addWay(ri, "highway", "secondary", 6, WHITE.color());
+		addWay(ri, "highway", "tertiary", 6, WHITE.color());
+		addWay(ri, "highway", "residential", 6, WHITE.color());
+		addWay(ri, "highway", "living_street", 6, WHITE.color());
+
+		return ri;
+	}
+
+	private static void addWay(RenderInstructions ri, String key, String value,
+			int width, ColorCode color)
+	{
+		ri.add(new WayInstruction(new TagSelector(key, value),
+				new SimpleWayStyle(width, color)));
 	}
 
 	private static void addWay(RenderInstructions ri, String key, String value,
