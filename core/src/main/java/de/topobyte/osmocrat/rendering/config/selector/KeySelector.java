@@ -17,6 +17,8 @@
 
 package de.topobyte.osmocrat.rendering.config.selector;
 
+import java.util.Map;
+
 public class KeySelector implements Selector
 {
 
@@ -35,6 +37,12 @@ public class KeySelector implements Selector
 	public void setKey(String key)
 	{
 		this.key = key;
+	}
+
+	@Override
+	public boolean matches(Map<String, String> tags)
+	{
+		return tags.containsKey(key);
 	}
 
 }

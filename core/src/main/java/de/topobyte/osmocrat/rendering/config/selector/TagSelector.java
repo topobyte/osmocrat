@@ -17,6 +17,8 @@
 
 package de.topobyte.osmocrat.rendering.config.selector;
 
+import java.util.Map;
+
 public class TagSelector implements Selector
 {
 
@@ -47,6 +49,16 @@ public class TagSelector implements Selector
 	public void setValue(String value)
 	{
 		this.value = value;
+	}
+
+	@Override
+	public boolean matches(Map<String, String> tags)
+	{
+		String v = tags.get(key);
+		if (v == null) {
+			return false;
+		}
+		return v.equals(value);
 	}
 
 }

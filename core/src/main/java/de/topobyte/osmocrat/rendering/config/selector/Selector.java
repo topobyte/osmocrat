@@ -17,7 +17,11 @@
 
 package de.topobyte.osmocrat.rendering.config.selector;
 
+import java.util.Map;
+
 public interface Selector
 {
+
+	boolean matches(Map<String, String> tags);
 
 }
