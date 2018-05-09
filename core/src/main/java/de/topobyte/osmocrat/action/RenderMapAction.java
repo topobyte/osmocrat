@@ -56,7 +56,8 @@ public class RenderMapAction extends OsmocratAction
 
 		JFrame frame = new JFrame("Render Map...");
 
-		RenderSetupPanel panel = new RenderSetupPanel(bbox, width, height);
+		RenderSetupPanel panel = new RenderSetupPanel(bbox, width, height,
+				osmocrat.getData());
 
 		frame.setContentPane(panel);
 		frame.pack();

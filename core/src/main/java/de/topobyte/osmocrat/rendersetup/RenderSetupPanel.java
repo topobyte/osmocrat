@@ -21,10 +21,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.mercator.image.MercatorImage;
+import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
+import de.topobyte.osmocrat.rendering.MapRenderer;
 
 public class RenderSetupPanel extends JPanel
 {
@@ -32,9 +35,12 @@ public class RenderSetupPanel extends JPanel
 	private static final long serialVersionUID = -8099819323319869874L;
 
 	private SetupPanel panel;
+	private InMemoryListDataSet data;
 
-	public RenderSetupPanel(BBox bbox, int width, int height)
+	public RenderSetupPanel(BBox bbox, int width, int height,
+			InMemoryListDataSet data)
 	{
+		this.data = data;
 		setLayout(new GridBagLayout());
 
 		panel = new SetupPanel(bbox, width, height);
@@ -73,6 +79,15 @@ public class RenderSetupPanel extends JPanel
 
 		System.out.println("Bounding Box: " + box);
 		System.out.println("Zoom: " + zoom);
+
+		MercatorImage mercatorImage = new MercatorImage(boundingBox, 800, 600);
+		MapRenderer renderer = new MapRenderer(boundingBox, mercatorImage,
+				data);
+
+		JFrame frame = new JFrame("Osmocrat Map");
+		frame.add(renderer);
+		frame.setVisible(true);
+		frame.setSize(width, height);
 	}
 
 }
