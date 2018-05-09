@@ -38,6 +38,10 @@ public class Rendering
 		addWay(ri, "highway", "primary", 6, 10, WHITE.color(), GRAY.color());
 		addWay(ri, "highway", "secondary", 6, 10, WHITE.color(), GRAY.color());
 		addWay(ri, "highway", "tertiary", 6, 10, WHITE.color(), GRAY.color());
+		addWay(ri, "highway", "residential", 6, 10, WHITE.color(),
+				GRAY.color());
+		addWay(ri, "highway", "living_street", 6, 10, WHITE.color(),
+				GRAY.color());
 
 		return ri;
 	}
