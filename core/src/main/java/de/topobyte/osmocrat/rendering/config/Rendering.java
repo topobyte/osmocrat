@@ -70,6 +70,23 @@ public class Rendering
 		return ri;
 	}
 
+	public static RenderInstructions style3()
+	{
+		RenderInstructions ri = new RenderInstructions();
+
+		addArea(ri, "waterway", "riverbank", new ColorCode(0xaad3de));
+
+		addWay(ri, "highway", "primary", 10, GRAY.color());
+		addWay(ri, "highway", "secondary", 10, GRAY.color());
+		addWay(ri, "highway", "tertiary", 10, GRAY.color());
+
+		addWay(ri, "highway", "primary", 6, WHITE.color());
+		addWay(ri, "highway", "secondary", 6, WHITE.color());
+		addWay(ri, "highway", "tertiary", 6, WHITE.color());
+
+		return ri;
+	}
+
 	private static void addWay(RenderInstructions ri, String key, String value,
 			int width, ColorCode color)
 	{
@@ -88,6 +105,13 @@ public class Rendering
 			ColorCode color)
 	{
 		ri.add(new AreaInstruction(new KeySelector(key),
+				new SimpleAreaStyle(color)));
+	}
+
+	private static void addArea(RenderInstructions ri, String key, String value,
+			ColorCode color)
+	{
+		ri.add(new AreaInstruction(new TagSelector(key, value),
 				new SimpleAreaStyle(color)));
 	}
 
