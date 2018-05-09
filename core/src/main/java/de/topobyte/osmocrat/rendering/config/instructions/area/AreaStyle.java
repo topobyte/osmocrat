@@ -15,41 +15,9 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with osmocrat. If not, see <http://www.gnu.org/licenses/>.
 
-package de.topobyte.osmocrat.rendering.config.instructions;
+package de.topobyte.osmocrat.rendering.config.instructions.area;
 
-import de.topobyte.osmocrat.rendering.config.instructions.area.AreaStyle;
-import de.topobyte.osmocrat.rendering.config.selector.Selector;
-
-public class AreaInstruction implements Instruction
+public interface AreaStyle
 {
-
-	private Selector selector;
-	private AreaStyle style;
-
-	public AreaInstruction(Selector selector, AreaStyle style)
-	{
-		this.selector = selector;
-		this.style = style;
-	}
-
-	public Selector getSelector()
-	{
-		return selector;
-	}
-
-	public void setSelector(Selector selector)
-	{
-		this.selector = selector;
-	}
-
-	public AreaStyle getStyle()
-	{
-		return style;
-	}
-
-	public void setStyle(AreaStyle style)
-	{
-		this.style = style;
-	}
 
 }

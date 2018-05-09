@@ -17,26 +17,19 @@
 
 package de.topobyte.osmocrat.rendering.config.instructions;
 
-import de.topobyte.chromaticity.ColorCode;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
 import de.topobyte.osmocrat.rendering.config.selector.Selector;
 
 public class WayInstruction implements Instruction
 {
 
 	private Selector selector;
-	private int widthFG;
-	private int widthBG;
-	private ColorCode fg;
-	private ColorCode bg;
+	private WayStyle style;
 
-	public WayInstruction(Selector selector, int widthFG, int widthBG,
-			ColorCode fg, ColorCode bg)
+	public WayInstruction(Selector selector, WayStyle style)
 	{
 		this.selector = selector;
-		this.widthFG = widthFG;
-		this.widthBG = widthBG;
-		this.fg = fg;
-		this.bg = bg;
+		this.style = style;
 	}
 
 	public Selector getSelector()
@@ -49,44 +42,14 @@ public class WayInstruction implements Instruction
 		this.selector = selector;
 	}
 
-	public int getWidthFG()
+	public WayStyle getStyle()
 	{
-		return widthFG;
+		return style;
 	}
 
-	public void setWidthFG(int widthFG)
+	public void setStyle(WayStyle style)
 	{
-		this.widthFG = widthFG;
-	}
-
-	public int getWidthBG()
-	{
-		return widthBG;
-	}
-
-	public void setWidthBG(int widthBG)
-	{
-		this.widthBG = widthBG;
-	}
-
-	public ColorCode getFg()
-	{
-		return fg;
-	}
-
-	public void setFg(ColorCode fg)
-	{
-		this.fg = fg;
-	}
-
-	public ColorCode getBg()
-	{
-		return bg;
-	}
-
-	public void setBg(ColorCode bg)
-	{
-		this.bg = bg;
+		this.style = style;
 	}
 
 }

@@ -15,41 +15,40 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with osmocrat. If not, see <http://www.gnu.org/licenses/>.
 
-package de.topobyte.osmocrat.rendering.config.instructions;
+package de.topobyte.osmocrat.rendering.config.instructions.ways;
 
-import de.topobyte.osmocrat.rendering.config.instructions.area.AreaStyle;
-import de.topobyte.osmocrat.rendering.config.selector.Selector;
+import de.topobyte.chromaticity.ColorCode;
 
-public class AreaInstruction implements Instruction
+public class SimpleWayStyle implements WayStyle
 {
 
-	private Selector selector;
-	private AreaStyle style;
+	private int width;
+	private ColorCode color;
 
-	public AreaInstruction(Selector selector, AreaStyle style)
+	public SimpleWayStyle(int width, ColorCode color)
 	{
-		this.selector = selector;
-		this.style = style;
+		this.width = width;
+		this.color = color;
 	}
 
-	public Selector getSelector()
+	public int getWidth()
 	{
-		return selector;
+		return width;
 	}
 
-	public void setSelector(Selector selector)
+	public void setWidth(int width)
 	{
-		this.selector = selector;
+		this.width = width;
 	}
 
-	public AreaStyle getStyle()
+	public ColorCode getColor()
 	{
-		return style;
+		return color;
 	}
 
-	public void setStyle(AreaStyle style)
+	public void setColor(ColorCode color)
 	{
-		this.style = style;
+		this.color = color;
 	}
 
 }

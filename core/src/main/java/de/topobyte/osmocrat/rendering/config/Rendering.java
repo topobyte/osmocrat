@@ -23,6 +23,8 @@ import static de.topobyte.chromaticity.WebColors.WHITE;
 import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
+import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.selector.KeySelector;
 import de.topobyte.osmocrat.rendering.config.selector.TagSelector;
 
@@ -49,14 +51,15 @@ public class Rendering
 	private static void addWay(RenderInstructions ri, String key, String value,
 			int widthFG, int widthBG, ColorCode fg, ColorCode bg)
 	{
-		ri.add(new WayInstruction(new TagSelector(key, value), widthFG, widthBG,
-				fg, bg));
+		ri.add(new WayInstruction(new TagSelector(key, value),
+				new TwofoldWayStyle(widthFG, widthBG, fg, bg)));
 	}
 
 	private static void addArea(RenderInstructions ri, String key,
 			ColorCode color)
 	{
-		ri.add(new AreaInstruction(new KeySelector(key), color));
+		ri.add(new AreaInstruction(new KeySelector(key),
+				new SimpleAreaStyle(color)));
 	}
 
 }

@@ -63,6 +63,11 @@ import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.Instruction;
 import de.topobyte.osmocrat.rendering.config.instructions.Instructions;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
+import de.topobyte.osmocrat.rendering.config.instructions.area.AreaStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
 
 public class ConfigMapRenderer extends JPanel
 {
@@ -266,30 +271,11 @@ public class ConfigMapRenderer extends JPanel
 			if (instruction instanceof WayInstruction) {
 				WayInstruction wi = (WayInstruction) instruction;
 				List<LineString> strings = ways.get(instruction);
-
-				g.setColor(AwtColors.convert(wi.getBg()));
-				g.setStroke(new BasicStroke(wi.getWidthBG(),
-						BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-				for (LineString string : strings) {
-					Path2D path = Jts2Awt.getPath(string, mercatorImage);
-					g.draw(path);
-				}
-
-				g.setColor(AwtColors.convert(wi.getFg()));
-				g.setStroke(new BasicStroke(wi.getWidthFG(),
-						BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-				for (LineString string : strings) {
-					Path2D path = Jts2Awt.getPath(string, mercatorImage);
-					g.draw(path);
-				}
+				render(g, wi, strings);
 			} else if (instruction instanceof AreaInstruction) {
 				AreaInstruction ai = (AreaInstruction) instruction;
 				List<Geometry> geometries = areas.get(instruction);
-				g.setColor(AwtColors.convert(ai.getColor()));
-				for (Geometry area : geometries) {
-					Shape polygon = Jts2Awt.toShape(area, mercatorImage);
-					g.fill(polygon);
-				}
+				render(g, ai, geometries);
 			}
 		}
 
@@ -299,6 +285,68 @@ public class ConfigMapRenderer extends JPanel
 		g.setColor(cBBox);
 		g.setStroke(new BasicStroke(2));
 		g.draw(shape);
+	}
+
+	private void render(Graphics2D g, AreaInstruction ai,
+			List<Geometry> geometries)
+	{
+		AreaStyle style = ai.getStyle();
+		if (style instanceof SimpleAreaStyle) {
+			render(g, (SimpleAreaStyle) style, geometries);
+		}
+	}
+
+	private void render(Graphics2D g, SimpleAreaStyle style,
+			List<Geometry> geometries)
+	{
+		g.setColor(AwtColors.convert(style.getColor()));
+		for (Geometry area : geometries) {
+			Shape polygon = Jts2Awt.toShape(area, mercatorImage);
+			g.fill(polygon);
+		}
+	}
+
+	private void render(Graphics2D g, WayInstruction wi,
+			List<LineString> strings)
+	{
+		WayStyle style = wi.getStyle();
+		if (style instanceof SimpleWayStyle) {
+			render(g, (SimpleWayStyle) style, strings);
+		} else if (style instanceof TwofoldWayStyle) {
+			render(g, (TwofoldWayStyle) style, strings);
+		}
+	}
+
+	private void render(Graphics2D g, SimpleWayStyle style,
+			List<LineString> strings)
+	{
+		g.setColor(AwtColors.convert(style.getColor()));
+		g.setStroke(new BasicStroke(style.getWidth(), BasicStroke.CAP_ROUND,
+				BasicStroke.JOIN_ROUND));
+		for (LineString string : strings) {
+			Path2D path = Jts2Awt.getPath(string, mercatorImage);
+			g.draw(path);
+		}
+	}
+
+	private void render(Graphics2D g, TwofoldWayStyle style,
+			List<LineString> strings)
+	{
+		g.setColor(AwtColors.convert(style.getBg()));
+		g.setStroke(new BasicStroke(style.getWidthBG(), BasicStroke.CAP_ROUND,
+				BasicStroke.JOIN_ROUND));
+		for (LineString string : strings) {
+			Path2D path = Jts2Awt.getPath(string, mercatorImage);
+			g.draw(path);
+		}
+
+		g.setColor(AwtColors.convert(style.getFg()));
+		g.setStroke(new BasicStroke(style.getWidthFG(), BasicStroke.CAP_ROUND,
+				BasicStroke.JOIN_ROUND));
+		for (LineString string : strings) {
+			Path2D path = Jts2Awt.getPath(string, mercatorImage);
+			g.draw(path);
+		}
 	}
 
 	private WayBuilder wayBuilder = new WayBuilder();
