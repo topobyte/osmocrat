@@ -37,11 +37,11 @@ public class TestSetupPanel extends JPanel
 	{
 		JFrame frame = new JFrame("Test SetupPanel");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setSize(600, 500);
 
 		TestSetupPanel panel = new TestSetupPanel();
 
 		frame.setContentPane(panel);
+		frame.pack();
 		frame.setVisible(true);
 	}
 
