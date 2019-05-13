@@ -230,7 +230,7 @@ public class SetupPanel extends JPanel
 
 	public int getImageHeight()
 	{
-		return width;
+		return height;
 	}
 
 }
