@@ -3,6 +3,9 @@ if (project.hasProperty("topobyte")) {
         + '/.gradle/topobyte.gradle'
 }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 dependencies {
     compile 'de.topobyte:osm4j-utils:0.1.2'
     compile 'de.topobyte:awt-utils:0.0.3'
