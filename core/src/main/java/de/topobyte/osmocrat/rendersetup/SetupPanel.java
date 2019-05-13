@@ -202,19 +202,21 @@ public class SetupPanel extends JPanel
 	private void setLabelBorder(JComponent component, boolean drop)
 	{
 		if (drop) {
-			component.setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createCompoundBorder(
-							BorderFactory.createEmptyBorder(5, 5, 5, 5),
-							BorderFactory
-									.createBevelBorder(BevelBorder.LOWERED)),
-					BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+			component
+					.setBorder(BorderFactory.createCompoundBorder(
+							BorderFactory.createCompoundBorder(
+									BorderFactory.createEmptyBorder(5, 5, 5, 5),
+									BorderFactory.createBevelBorder(
+											BevelBorder.LOWERED)),
+							BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		} else {
-			component.setBorder(BorderFactory.createCompoundBorder(
-					BorderFactory.createCompoundBorder(
-							BorderFactory.createEmptyBorder(5, 5, 5, 5),
-							BorderFactory
-									.createEtchedBorder(EtchedBorder.LOWERED)),
-					BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+			component
+					.setBorder(BorderFactory.createCompoundBorder(
+							BorderFactory.createCompoundBorder(
+									BorderFactory.createEmptyBorder(5, 5, 5, 5),
+									BorderFactory.createEtchedBorder(
+											EtchedBorder.LOWERED)),
+							BorderFactory.createEmptyBorder(5, 5, 5, 5)));
 		}
 	}
 
