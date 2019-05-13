@@ -135,7 +135,7 @@ public class ConfigMapRenderer extends JPanel
 		EntityFinder wayFinder = EntityFinders.create(data,
 				EntityNotFoundStrategy.IGNORE);
 
-		Envelope envelope = bbox.toEnvelope();
+		Envelope envelope = mercatorImage.getVisibleBoundingBox().toEnvelope();
 
 		List<WayInstruction> wayInstructions = Instructions
 				.way(instructions.getInstructions());
