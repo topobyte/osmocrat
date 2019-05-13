@@ -4,7 +4,7 @@ targetCompatibility = 1.8
 dependencies {
     compile project(':osmocrat-core')
 
-    compile 'de.topobyte:commons-cli-helper:0.0.6'
+    compile 'de.topobyte:commons-cli-helper:0.1.0'
 
     runtime 'org.slf4j:slf4j-log4j12:1.6.1'
     runtime 'log4j:log4j:1.2.16'
