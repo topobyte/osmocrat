@@ -1,4 +1,4 @@
-// Copyright 2018 Sebastian Kuerten
+// Copyright 2019 Sebastian Kuerten
 //
 // This file is part of osmocrat.
 //
@@ -17,13 +17,15 @@
 
 package de.topobyte.osmocrat;
 
-import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import javax.swing.JFrame;
+import javax.imageio.ImageIO;
 
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.mercator.image.MercatorImage;
@@ -33,11 +35,10 @@ import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.dataset.ListDataSetLoader;
 import de.topobyte.osm4j.xml.dynsax.OsmXmlReader;
 import de.topobyte.osmocrat.rendering.ConfigMapRenderer;
-import de.topobyte.osmocrat.rendering.ConfigMapRendererPanel;
 import de.topobyte.osmocrat.rendering.config.Rendering;
 import de.topobyte.overpass.OverpassUtil;
 
-public class TestMapRenderingConfig
+public class TestMapRenderingConfigToPng
 {
 
 	public static void main(String[] args) throws IOException, OsmInputException
@@ -58,17 +59,23 @@ public class TestMapRenderingConfig
 
 		MercatorImage mapImage = new MercatorImage(bbox, width, height);
 
+		BufferedImage image = new BufferedImage(width, height,
+				BufferedImage.TYPE_4BYTE_ABGR);
+
+		Graphics2D graphics = image.createGraphics();
+
+		Color cBackground = new Color(0xEEEEEE);
+		graphics.setColor(cBackground);
+		graphics.fillRect(0, 0, width, height);
+
 		ConfigMapRenderer configRenderer = new ConfigMapRenderer(bbox, mapImage,
 				data, Rendering.style2());
-		ConfigMapRendererPanel panel = new ConfigMapRendererPanel(
-				configRenderer);
-		panel.setPreferredSize(new Dimension(width, height));
+		configRenderer.paint(graphics);
 
-		JFrame frame = new JFrame("Osmocrat Map");
-		frame.setContentPane(panel);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
+		Path file = Files.createTempFile("map", ".png");
+		System.out.println(file);
+
+		ImageIO.write(image, "png", file.toFile());
 	}
 
 }
