@@ -18,7 +18,6 @@
 package de.topobyte.osmocrat.rendering;
 
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -40,6 +39,8 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.awt.util.GraphicsUtil;
 import de.topobyte.chromaticity.AwtColors;
+import de.topobyte.chromaticity.ColorCode;
+import de.topobyte.chromaticity.WebColors;
 import de.topobyte.jts2awt.Jts2Awt;
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
@@ -69,7 +70,7 @@ public class ConfigMapRenderer
 {
 
 	// Some fields that define the map colors and street line widths
-	private Color cBBox = Color.BLUE;
+	private ColorCode cBBox = WebColors.BLUE.color();
 
 	// This will be used to map geometry coordinates to screen coordinates
 	private MercatorImage mercatorImage;
@@ -256,7 +257,7 @@ public class ConfigMapRenderer
 		// Also draw a rectangle around the query bounding box
 		Geometry queryBox = new GeometryFactory().toGeometry(bbox.toEnvelope());
 		Shape shape = Jts2Awt.toShape(queryBox, mercatorImage);
-		g.setColor(cBBox);
+		g.setColor(AwtColors.convert(cBBox));
 		g.setStroke(new BasicStroke(2));
 		g.draw(shape);
 	}
