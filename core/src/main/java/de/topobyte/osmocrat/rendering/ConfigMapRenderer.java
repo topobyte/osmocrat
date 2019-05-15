@@ -22,8 +22,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.geom.Path2D;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,8 +30,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.swing.JPanel;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
@@ -69,13 +65,10 @@ import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
 
-public class ConfigMapRenderer extends JPanel
+public class ConfigMapRenderer
 {
 
-	private static final long serialVersionUID = 1L;
-
 	// Some fields that define the map colors and street line widths
-	private Color cBackground = new Color(0xEEEEEE);
 	private Color cBBox = Color.BLUE;
 
 	// This will be used to map geometry coordinates to screen coordinates
@@ -104,19 +97,6 @@ public class ConfigMapRenderer extends JPanel
 		this.mercatorImage = mercatorImage;
 		this.data = data;
 		this.instructions = instructions;
-
-		// When the panel's size changes, define a new MercatorImage and trigger
-		// a repaint on our panel
-		addComponentListener(new ComponentAdapter() {
-
-			@Override
-			public void componentResized(ComponentEvent e)
-			{
-				refreshMercatorImage();
-				repaint();
-			}
-
-		});
 
 		System.out.println("building rendering data...");
 		buildRenderingData();
@@ -251,21 +231,15 @@ public class ConfigMapRenderer extends JPanel
 		}
 	}
 
-	public void refreshMercatorImage()
+	public void refreshMercatorImage(int width, int height)
 	{
-		mercatorImage = new MercatorImage(bbox, getWidth(), getHeight());
+		mercatorImage = new MercatorImage(bbox, width, height);
 	}
 
-	@Override
-	protected void paintComponent(Graphics graphics)
+	public void paint(Graphics graphics)
 	{
-		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 		GraphicsUtil.useAntialiasing(g, true);
-
-		// Fill the background
-		g.setColor(cBackground);
-		g.fillRect(0, 0, getWidth(), getHeight());
 
 		for (Instruction instruction : instructions.getInstructions()) {
 			if (instruction instanceof WayInstruction) {
