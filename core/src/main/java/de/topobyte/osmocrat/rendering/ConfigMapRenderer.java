@@ -243,7 +243,9 @@ public class ConfigMapRenderer
 
 	public void paint(SvgFile svg)
 	{
-		// TODO Auto-generated method stub
+		InkscapeConfigMapRenderer renderer = new InkscapeConfigMapRenderer(bbox,
+				mercatorImage, instructions, areas, ways, names);
+		renderer.paint(svg);
 	}
 
 	private WayBuilder wayBuilder = new WayBuilder();
