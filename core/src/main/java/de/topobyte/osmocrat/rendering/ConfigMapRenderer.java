@@ -82,6 +82,8 @@ public class ConfigMapRenderer
 	// The data set will be used as entity provider when building geometries
 	private InMemoryListDataSet data;
 
+	private boolean drawBoundingBox = true;
+
 	private RenderInstructions instructions;
 
 	// We build the geometries to be rendered during construction and store them
@@ -102,6 +104,16 @@ public class ConfigMapRenderer
 		System.out.println("building rendering data...");
 		buildRenderingData();
 		System.out.println("done");
+	}
+
+	public boolean isDrawBoundingBox()
+	{
+		return drawBoundingBox;
+	}
+
+	public void setDrawBoundingBox(boolean drawBoundingBox)
+	{
+		this.drawBoundingBox = drawBoundingBox;
 	}
 
 	private void buildRenderingData()
@@ -254,12 +266,15 @@ public class ConfigMapRenderer
 			}
 		}
 
-		// Also draw a rectangle around the query bounding box
-		Geometry queryBox = new GeometryFactory().toGeometry(bbox.toEnvelope());
-		Shape shape = Jts2Awt.toShape(queryBox, mercatorImage);
-		g.setColor(AwtColors.convert(cBBox));
-		g.setStroke(new BasicStroke(2));
-		g.draw(shape);
+		if (drawBoundingBox) {
+			// Also draw a rectangle around the query bounding box
+			Geometry queryBox = new GeometryFactory()
+					.toGeometry(bbox.toEnvelope());
+			Shape shape = Jts2Awt.toShape(queryBox, mercatorImage);
+			g.setColor(AwtColors.convert(cBBox));
+			g.setStroke(new BasicStroke(2));
+			g.draw(shape);
+		}
 	}
 
 	private void render(Graphics2D g, AreaInstruction ai,
