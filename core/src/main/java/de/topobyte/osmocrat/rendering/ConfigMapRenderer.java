@@ -33,6 +33,7 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiPolygon;
 
 import de.topobyte.adt.geo.BBox;
+import de.topobyte.inkscape4j.SvgFile;
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.model.iface.OsmRelation;
@@ -238,6 +239,11 @@ public class ConfigMapRenderer
 				mercatorImage, instructions, areas, ways, names);
 		renderer.setDrawBoundingBox(drawBoundingBox);
 		renderer.paint(g);
+	}
+
+	public void paint(SvgFile svg)
+	{
+		// TODO Auto-generated method stub
 	}
 
 	private WayBuilder wayBuilder = new WayBuilder();
