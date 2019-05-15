@@ -20,7 +20,8 @@ package de.topobyte.osmocrat;
 import java.awt.Dimension;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import javax.swing.JFrame;
 
@@ -34,6 +35,7 @@ import de.topobyte.osm4j.xml.dynsax.OsmXmlReader;
 import de.topobyte.osmocrat.rendering.ConfigMapRenderer;
 import de.topobyte.osmocrat.rendering.ConfigMapRendererPanel;
 import de.topobyte.osmocrat.rendering.config.Rendering;
+import de.topobyte.overpass.OverpassUtil;
 
 public class TestMapRenderingConfig
 {
@@ -45,13 +47,9 @@ public class TestMapRenderingConfig
 		int width = 800;
 		int height = 600;
 
-		// Define a query to retrieve some data
-		String queryTemplate = "http://overpass-api.de/api/interpreter?data=(node(%f,%f,%f,%f);<;>;);out;";
-		String query = String.format(queryTemplate, bbox.getLat2(),
-				bbox.getLon1(), bbox.getLat1(), bbox.getLon2());
-
-		// Open a stream
-		InputStream input = new URL(query).openStream();
+		OverpassUtil.cache(bbox);
+		Path cacheFile = OverpassUtil.cacheFile(bbox);
+		InputStream input = Files.newInputStream(cacheFile);
 
 		// Create a reader and read all data into a data set
 		OsmReader reader = new OsmXmlReader(input, false);
