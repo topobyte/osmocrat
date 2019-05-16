@@ -42,6 +42,7 @@ import de.topobyte.osmocrat.rendering.config.instructions.Instruction;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.area.AreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.DashedWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
@@ -144,6 +145,8 @@ public class GraphicsConfigMapRenderer
 			render(g, (SimpleWayStyle) style, strings);
 		} else if (style instanceof TwofoldWayStyle) {
 			render(g, (TwofoldWayStyle) style, strings);
+		} else if (style instanceof DashedWayStyle) {
+			render(g, (DashedWayStyle) style, strings);
 		}
 	}
 
@@ -173,6 +176,24 @@ public class GraphicsConfigMapRenderer
 		g.setColor(AwtColors.convert(style.getFg()));
 		g.setStroke(new BasicStroke(style.getWidthFG(), BasicStroke.CAP_ROUND,
 				BasicStroke.JOIN_ROUND));
+		for (LineString string : strings) {
+			Path2D path = Jts2Awt.getPath(string, mercatorImage);
+			g.draw(path);
+		}
+	}
+
+	private void render(Graphics2D g, DashedWayStyle style,
+			List<LineString> strings)
+	{
+		List<Float> dashArray = style.getDashArray();
+		float[] dash = new float[dashArray.size()];
+		for (int i = 0; i < dashArray.size(); i++) {
+			dash[i] = dashArray.get(i);
+		}
+
+		g.setColor(AwtColors.convert(style.getColor()));
+		g.setStroke(new BasicStroke(style.getWidth(), BasicStroke.CAP_ROUND,
+				BasicStroke.JOIN_ROUND, 10.0f, dash, 0f));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);

@@ -20,10 +20,14 @@ package de.topobyte.osmocrat.rendering.config;
 import static de.topobyte.chromaticity.WebColors.GRAY;
 import static de.topobyte.chromaticity.WebColors.WHITE;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.DashedWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.selector.KeySelector;
@@ -37,6 +41,8 @@ public class Rendering
 		RenderInstructions ri = new RenderInstructions();
 
 		addArea(ri, "building", new ColorCode(0xFFC2C2));
+
+		addWay(ri, "highway", "footway", 1, new float[] { 2, 2 }, GRAY.color());
 
 		addWay(ri, "highway", "trunk", 6, 10, WHITE.color(), GRAY.color());
 		addWay(ri, "highway", "primary", 6, 10, WHITE.color(), GRAY.color());
@@ -55,6 +61,8 @@ public class Rendering
 		RenderInstructions ri = new RenderInstructions();
 
 		addArea(ri, "building", new ColorCode(0xFFC2C2));
+
+		addWay(ri, "highway", "footway", 1, new float[] { 2, 2 }, GRAY.color());
 
 		addWay(ri, "highway", "trunk", 10, GRAY.color());
 		addWay(ri, "highway", "primary", 10, GRAY.color());
@@ -79,6 +87,8 @@ public class Rendering
 
 		addArea(ri, "waterway", "riverbank", new ColorCode(0xaad3de));
 
+		addWay(ri, "highway", "footway", 1, new float[] { 2, 2 }, GRAY.color());
+
 		addWay(ri, "highway", "trunk", 10, GRAY.color());
 		addWay(ri, "highway", "primary", 10, GRAY.color());
 		addWay(ri, "highway", "secondary", 10, GRAY.color());
@@ -97,6 +107,18 @@ public class Rendering
 	{
 		ri.add(new WayInstruction(new TagSelector(key, value),
 				new SimpleWayStyle(width, color)));
+	}
+
+	private static void addWay(RenderInstructions ri, String key, String value,
+			int width, float[] dashes, ColorCode color)
+	{
+		List<Float> dashArray = new ArrayList<>();
+		for (int i = 0; i < dashes.length; i++) {
+			dashArray.add(dashes[i]);
+		}
+
+		ri.add(new WayInstruction(new TagSelector(key, value),
+				new DashedWayStyle(width, color, dashArray)));
 	}
 
 	private static void addWay(RenderInstructions ri, String key, String value,
