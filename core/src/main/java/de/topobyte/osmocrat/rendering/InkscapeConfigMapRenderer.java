@@ -42,6 +42,7 @@ import de.topobyte.osmocrat.rendering.config.instructions.Instruction;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.area.AreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.DashedWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
@@ -168,12 +169,29 @@ public class InkscapeConfigMapRenderer
 			render(svg, (SimpleWayStyle) style, strings);
 		} else if (style instanceof TwofoldWayStyle) {
 			render(svg, (TwofoldWayStyle) style, strings);
+		} else if (style instanceof DashedWayStyle) {
+			render(svg, (DashedWayStyle) style, strings);
 		}
 	}
 
 	private void render(SvgFile svg, SimpleWayStyle style,
 			List<LineString> strings)
 	{
+		for (LineString string : strings) {
+			Geometry transformed = transformer.transform(string);
+			Path path = JtsToPath.convert(id(), FillRule.EVEN_ODD, transformed);
+			layer.getObjects().add(path);
+			path.setStyle(
+					style(null, style.getColor(), 1, 1, 1, style.getWidth()));
+		}
+	}
+
+	private void render(SvgFile svg, DashedWayStyle style,
+			List<LineString> strings)
+	{
+		List<Float> dashArray = style.getDashArray();
+		// TODO: use dash array
+
 		for (LineString string : strings) {
 			Geometry transformed = transformer.transform(string);
 			Path path = JtsToPath.convert(id(), FillRule.EVEN_ODD, transformed);
