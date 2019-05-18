@@ -34,6 +34,8 @@ import de.topobyte.inkscape4j.Layer;
 import de.topobyte.inkscape4j.SvgFile;
 import de.topobyte.inkscape4j.path.FillRule;
 import de.topobyte.inkscape4j.path.Path;
+import de.topobyte.inkscape4j.style.LineCap;
+import de.topobyte.inkscape4j.style.LineJoin;
 import de.topobyte.jts.utils.transform.CoordinateGeometryTransformer;
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osmocrat.rendering.config.RenderInstructions;
@@ -158,6 +160,8 @@ public class InkscapeConfigMapRenderer
 			Path path = JtsToPath.convert(id(), FillRule.EVEN_ODD, transformed);
 			layer.getObjects().add(path);
 			path.setStyle(style(style.getColor(), null, 1, 1, 1, 0));
+			path.getStyle().setLineCap(LineCap.ROUND);
+			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
 	}
 
@@ -183,6 +187,8 @@ public class InkscapeConfigMapRenderer
 			layer.getObjects().add(path);
 			path.setStyle(
 					style(null, style.getColor(), 1, 1, 1, style.getWidth()));
+			path.getStyle().setLineCap(LineCap.ROUND);
+			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
 	}
 
@@ -198,6 +204,8 @@ public class InkscapeConfigMapRenderer
 			layer.getObjects().add(path);
 			path.setStyle(
 					style(null, style.getColor(), 1, 1, 1, style.getWidth()));
+			path.getStyle().setLineCap(LineCap.ROUND);
+			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
 	}
 
@@ -210,6 +218,8 @@ public class InkscapeConfigMapRenderer
 			layer.getObjects().add(path);
 			path.setStyle(
 					style(null, style.getBg(), 1, 1, 1, style.getWidthBG()));
+			path.getStyle().setLineCap(LineCap.ROUND);
+			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
 
 		for (LineString string : strings) {
@@ -218,6 +228,8 @@ public class InkscapeConfigMapRenderer
 			layer.getObjects().add(path);
 			path.setStyle(
 					style(null, style.getFg(), 1, 1, 1, style.getWidthFG()));
+			path.getStyle().setLineCap(LineCap.ROUND);
+			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
 	}
 
