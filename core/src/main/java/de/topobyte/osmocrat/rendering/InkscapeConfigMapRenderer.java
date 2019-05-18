@@ -196,7 +196,10 @@ public class InkscapeConfigMapRenderer
 			List<LineString> strings)
 	{
 		List<Float> dashArray = style.getDashArray();
-		// TODO: use dash array
+		float[] dash = new float[dashArray.size()];
+		for (int i = 0; i < dashArray.size(); i++) {
+			dash[i] = dashArray.get(i);
+		}
 
 		for (LineString string : strings) {
 			Geometry transformed = transformer.transform(string);
@@ -206,6 +209,7 @@ public class InkscapeConfigMapRenderer
 					style(null, style.getColor(), 1, 1, 1, style.getWidth()));
 			path.getStyle().setLineCap(LineCap.ROUND);
 			path.getStyle().setLineJoin(LineJoin.ROUND);
+			path.getStyle().setDashArray(dash);
 		}
 	}
 
