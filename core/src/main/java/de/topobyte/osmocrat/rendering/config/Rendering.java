@@ -29,6 +29,7 @@ import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.DashedWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.TextWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.selector.KeySelector;
 import de.topobyte.osmocrat.rendering.config.selector.TagSelector;
@@ -77,6 +78,9 @@ public class Rendering
 		addWay(ri, "highway", "tertiary", 6, WHITE.color());
 		addWay(ri, "highway", "residential", 6, WHITE.color());
 		addWay(ri, "highway", "living_street", 6, WHITE.color());
+
+		ri.add(new WayInstruction(new TagSelector("highway", "residential"),
+				new TextWayStyle(8, GRAY.color())));
 
 		return ri;
 	}

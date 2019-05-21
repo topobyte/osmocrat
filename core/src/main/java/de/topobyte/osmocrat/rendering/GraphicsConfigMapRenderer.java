@@ -18,13 +18,16 @@
 package de.topobyte.osmocrat.rendering;
 
 import java.awt.BasicStroke;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.Map;
 
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
@@ -34,6 +37,7 @@ import de.topobyte.awt.util.GraphicsUtil;
 import de.topobyte.chromaticity.AwtColors;
 import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.chromaticity.WebColors;
+import de.topobyte.jgs.transform.CoordinateTransformer;
 import de.topobyte.jts2awt.Jts2Awt;
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osmocrat.rendering.config.RenderInstructions;
@@ -44,6 +48,7 @@ import de.topobyte.osmocrat.rendering.config.instructions.area.AreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.DashedWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.TextWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
 
@@ -147,6 +152,8 @@ public class GraphicsConfigMapRenderer
 			render(g, (TwofoldWayStyle) style, strings);
 		} else if (style instanceof DashedWayStyle) {
 			render(g, (DashedWayStyle) style, strings);
+		} else if (style instanceof TextWayStyle) {
+			render(g, (TextWayStyle) style, strings);
 		}
 	}
 
@@ -197,6 +204,72 @@ public class GraphicsConfigMapRenderer
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
+		}
+	}
+
+	private void render(Graphics2D g, TextWayStyle style,
+			List<LineString> strings)
+	{
+		g.setColor(AwtColors.convert(style.getColor()));
+		g.setStroke(new BasicStroke(style.getSize(), BasicStroke.CAP_ROUND,
+				BasicStroke.JOIN_ROUND));
+
+		for (LineString string : strings) {
+			String name = names.get(string);
+			paintStreetLabel(g, string, name, mercatorImage);
+		}
+	}
+
+	private void paintStreetLabel(Graphics2D g, LineString string, String name,
+			CoordinateTransformer t)
+	{
+		// We will need this to measure the length of street names
+		FontMetrics metrics = g.getFontMetrics();
+
+		// For each segment
+		for (int i = 1; i < string.getNumPoints(); i++) {
+
+			// Segment is from c to d (WGS84 coordinates)
+			Coordinate c = string.getCoordinateN(i - 1);
+			Coordinate d = string.getCoordinateN(i);
+
+			// Map coordinates to screen coordinates
+			double cx = t.getX(c.x);
+			double cy = t.getY(c.y);
+			double dx = t.getX(d.x);
+			double dy = t.getY(d.y);
+
+			// Determine the length of the segment on the screen
+			double len = Math
+					.sqrt((dx - cx) * (dx - cx) + (dy - cy) * (dy - cy));
+
+			// And also the length of the rendered street name
+			int textLength = metrics.stringWidth(name);
+
+			// Render only if there is enough space
+			if (len <= textLength) {
+				continue;
+			}
+
+			// We're going to modify the Graphics2D's transformation object to
+			// render the text rotated and positioned, so we need to backup the
+			// current transform object
+			AffineTransform backup = g.getTransform();
+
+			// We center the text on the segment so we calculate the offset
+			// depending on the actual length of the text
+			double offset = (len - textLength) / 2;
+
+			// Define how to render text using transformations
+			g.translate(cx, cy);
+			g.rotate(Math.atan2(dy - cy, dx - cx));
+			g.translate(offset, 4);
+
+			// Draw!
+			g.drawString(name, 0, 0);
+
+			// Undo our transformation
+			g.setTransform(backup);
 		}
 	}
 
