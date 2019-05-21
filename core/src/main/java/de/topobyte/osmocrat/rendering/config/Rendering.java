@@ -17,6 +17,7 @@
 
 package de.topobyte.osmocrat.rendering.config;
 
+import static de.topobyte.chromaticity.WebColors.BLACK;
 import static de.topobyte.chromaticity.WebColors.GRAY;
 import static de.topobyte.chromaticity.WebColors.WHITE;
 
@@ -80,7 +81,8 @@ public class Rendering
 		addWay(ri, "highway", "living_street", 6, WHITE.color());
 
 		ri.add(new WayInstruction(new TagSelector("highway", "residential"),
-				new TextWayStyle(8, GRAY.color())));
+				new TextWayStyle("Arial", 14, BLACK.color(), 2,
+						WHITE.color())));
 
 		return ri;
 	}

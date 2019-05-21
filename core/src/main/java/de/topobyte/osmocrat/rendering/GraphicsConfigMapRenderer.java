@@ -18,26 +18,27 @@
 package de.topobyte.osmocrat.rendering;
 
 import java.awt.BasicStroke;
-import java.awt.FontMetrics;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
+import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.Map;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Polygon;
 
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.awt.util.GraphicsUtil;
 import de.topobyte.chromaticity.AwtColors;
 import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.chromaticity.WebColors;
-import de.topobyte.jgs.transform.CoordinateTransformer;
+import de.topobyte.jgs.transform.IdentityCoordinateTransformer;
+import de.topobyte.jts.utils.transform.CoordinateGeometryTransformer;
 import de.topobyte.jts2awt.Jts2Awt;
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osmocrat.rendering.config.RenderInstructions;
@@ -51,6 +52,13 @@ import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TextWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
+import de.topobyte.osmocrat.text.BoolResult;
+import de.topobyte.osmocrat.text.GeneralRectangle;
+import de.topobyte.osmocrat.text.TextIntersectionChecker;
+import de.topobyte.osmocrat.text.TextIntersectionCheckerTree;
+import de.topobyte.osmocrat.text.TextUtil;
+import de.topobyte.osmocrat.text.awt.AwtTextUtil;
+import de.topobyte.osmocrat.text.awt.TextPath;
 
 public class GraphicsConfigMapRenderer
 {
@@ -64,12 +72,15 @@ public class GraphicsConfigMapRenderer
 	private BBox bbox;
 
 	private boolean drawBoundingBox = true;
+	private boolean drawTextBoxes = false;
 
 	private RenderInstructions instructions;
 
 	private Map<AreaInstruction, List<Geometry>> areas;
 	private Map<WayInstruction, List<LineString>> ways;
 	private Map<LineString, String> names;
+
+	private TextIntersectionChecker textIntersectionChecker;
 
 	public GraphicsConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
 			RenderInstructions instructions,
@@ -95,10 +106,22 @@ public class GraphicsConfigMapRenderer
 		this.drawBoundingBox = drawBoundingBox;
 	}
 
+	public boolean isDrawTextBoxes()
+	{
+		return drawTextBoxes;
+	}
+
+	public void setDrawTextBoxes(boolean drawTextBoxes)
+	{
+		this.drawTextBoxes = drawTextBoxes;
+	}
+
 	public void paint(Graphics graphics)
 	{
 		Graphics2D g = (Graphics2D) graphics;
 		GraphicsUtil.useAntialiasing(g, true);
+
+		textIntersectionChecker = new TextIntersectionCheckerTree();
 
 		for (Instruction instruction : instructions.getInstructions()) {
 			if (instruction instanceof WayInstruction) {
@@ -178,6 +201,7 @@ public class GraphicsConfigMapRenderer
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
+			// System.out.println("lineto");
 		}
 
 		g.setColor(AwtColors.convert(style.getFg()));
@@ -210,67 +234,72 @@ public class GraphicsConfigMapRenderer
 	private void render(Graphics2D g, TextWayStyle style,
 			List<LineString> strings)
 	{
-		g.setColor(AwtColors.convert(style.getColor()));
-		g.setStroke(new BasicStroke(style.getSize(), BasicStroke.CAP_ROUND,
-				BasicStroke.JOIN_ROUND));
-
 		for (LineString string : strings) {
 			String name = names.get(string);
-			paintStreetLabel(g, string, name, mercatorImage);
+			paintLabel(g, string, name, style);
 		}
 	}
 
-	private void paintStreetLabel(Graphics2D g, LineString string, String name,
-			CoordinateTransformer t)
+	private void paintLabel(Graphics2D g, LineString string, String name,
+			TextWayStyle style)
 	{
-		// We will need this to measure the length of street names
-		FontMetrics metrics = g.getFontMetrics();
+		Path2D path = Jts2Awt.getPath(string, mercatorImage);
+		LineString stringImage = (LineString) new CoordinateGeometryTransformer(
+				mercatorImage).transform(string);
 
-		// For each segment
-		for (int i = 1; i < string.getNumPoints(); i++) {
+		double padding = 5;
 
-			// Segment is from c to d (WGS84 coordinates)
-			Coordinate c = string.getCoordinateN(i - 1);
-			Coordinate d = string.getCoordinateN(i);
+		Font font = g.getFont().deriveFont(style.getSize());
+		font = new Font(style.getFontName(), Font.PLAIN, style.getSize());
 
-			// Map coordinates to screen coordinates
-			double cx = t.getX(c.x);
-			double cy = t.getY(c.y);
-			double dx = t.getX(d.x);
-			double dy = t.getY(d.y);
+		float pathLength = AwtTextUtil.measurePathLength(path);
+		double textLength = AwtTextUtil.getTextWidth(font, name);
+		double paddedTextLength = textLength + 2 * padding;
 
-			// Determine the length of the segment on the screen
-			double len = Math
-					.sqrt((dx - cx) * (dx - cx) + (dy - cy) * (dy - cy));
-
-			// And also the length of the rendered street name
-			int textLength = metrics.stringWidth(name);
-
-			// Render only if there is enough space
-			if (len <= textLength) {
-				continue;
-			}
-
-			// We're going to modify the Graphics2D's transformation object to
-			// render the text rotated and positioned, so we need to backup the
-			// current transform object
-			AffineTransform backup = g.getTransform();
-
-			// We center the text on the segment so we calculate the offset
-			// depending on the actual length of the text
-			double offset = (len - textLength) / 2;
-
-			// Define how to render text using transformations
-			g.translate(cx, cy);
-			g.rotate(Math.atan2(dy - cy, dx - cx));
-			g.translate(offset, 4);
-
-			// Draw!
-			g.drawString(name, 0, 0);
-
-			// Undo our transformation
-			g.setTransform(backup);
+		if (paddedTextLength > pathLength) {
+			return;
 		}
+
+		double offset = (pathLength - paddedTextLength) / 2;
+
+		BoolResult isReverse = new BoolResult();
+		float[][] boxes = TextUtil.createTextBoxes(stringImage, offset,
+				paddedTextLength, style.getSize(), isReverse);
+
+		if (!textIntersectionChecker.isValid(boxes)) {
+			return;
+		}
+
+		textIntersectionChecker.add(boxes);
+
+		if (drawTextBoxes) {
+			g.setColor(AwtColors.convert(WebColors.GREEN.color()));
+			g.setStroke(new BasicStroke(1));
+			for (float[] box : boxes) {
+				Polygon polygon = GeneralRectangle.createPolygon(box);
+				Area area = Jts2Awt.toShape(polygon,
+						new IdentityCoordinateTransformer());
+				g.draw(area);
+			}
+		}
+
+		TextPath line = AwtTextUtil.createLine(path, (float) paddedTextLength,
+				(float) offset);
+		Path2D p = line.getPath();
+
+		if (isReverse.value) {
+			p = AwtTextUtil.reverse(p);
+		}
+
+		Shape shape = AwtTextUtil.createStrokedShape(p, font, name);
+
+		g.setColor(AwtColors.convert(style.getColorOutline()));
+		g.setStroke(new BasicStroke(style.getWidthOutline(),
+				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		g.draw(shape);
+
+		g.setColor(AwtColors.convert(style.getColor()));
+		g.fill(shape);
 	}
 
 }

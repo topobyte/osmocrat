@@ -22,13 +22,30 @@ import de.topobyte.chromaticity.ColorCode;
 public class TextWayStyle implements WayStyle
 {
 
+	private String fontName;
 	private int size;
 	private ColorCode color;
+	private float widthOutline;
+	private ColorCode colorOutline;
 
-	public TextWayStyle(int size, ColorCode color)
+	public TextWayStyle(String fontName, int size, ColorCode color,
+			float widthOutline, ColorCode colorOutline)
 	{
+		this.fontName = fontName;
 		this.size = size;
 		this.color = color;
+		this.widthOutline = widthOutline;
+		this.colorOutline = colorOutline;
+	}
+
+	public String getFontName()
+	{
+		return fontName;
+	}
+
+	public void setFontName(String fontName)
+	{
+		this.fontName = fontName;
 	}
 
 	public int getSize()
@@ -49,6 +66,26 @@ public class TextWayStyle implements WayStyle
 	public void setColor(ColorCode color)
 	{
 		this.color = color;
+	}
+
+	public float getWidthOutline()
+	{
+		return widthOutline;
+	}
+
+	public void setWidthOutline(float widthOutline)
+	{
+		this.widthOutline = widthOutline;
+	}
+
+	public ColorCode getColorOutline()
+	{
+		return colorOutline;
+	}
+
+	public void setColorOutline(ColorCode colorOutline)
+	{
+		this.colorOutline = colorOutline;
 	}
 
 }
