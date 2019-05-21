@@ -19,24 +19,30 @@ package de.topobyte.osmocrat.rendering;
 
 import static de.topobyte.inkscape4j.Styles.style;
 
+import java.awt.Font;
+import java.awt.Shape;
+import java.awt.geom.Path2D;
 import java.util.List;
 import java.util.Map;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.LineString;
+import com.vividsolutions.jts.geom.Polygon;
 
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.chromaticity.WebColors;
 import de.topobyte.inkscape4j.JtsToPath;
 import de.topobyte.inkscape4j.Layer;
+import de.topobyte.inkscape4j.ShapeToPath;
 import de.topobyte.inkscape4j.SvgFile;
 import de.topobyte.inkscape4j.path.FillRule;
 import de.topobyte.inkscape4j.path.Path;
 import de.topobyte.inkscape4j.style.LineCap;
 import de.topobyte.inkscape4j.style.LineJoin;
 import de.topobyte.jts.utils.transform.CoordinateGeometryTransformer;
+import de.topobyte.jts2awt.Jts2Awt;
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osmocrat.rendering.config.RenderInstructions;
 import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
@@ -46,8 +52,16 @@ import de.topobyte.osmocrat.rendering.config.instructions.area.AreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.DashedWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.SimpleWayStyle;
+import de.topobyte.osmocrat.rendering.config.instructions.ways.TextWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
+import de.topobyte.osmocrat.text.BoolResult;
+import de.topobyte.osmocrat.text.GeneralRectangle;
+import de.topobyte.osmocrat.text.TextIntersectionChecker;
+import de.topobyte.osmocrat.text.TextIntersectionCheckerTree;
+import de.topobyte.osmocrat.text.TextUtil;
+import de.topobyte.osmocrat.text.awt.AwtTextUtil;
+import de.topobyte.osmocrat.text.awt.TextPath;
 
 public class InkscapeConfigMapRenderer
 {
@@ -61,12 +75,15 @@ public class InkscapeConfigMapRenderer
 	private BBox bbox;
 
 	private boolean drawBoundingBox = true;
+	private boolean drawTextBoxes = false;
 
 	private RenderInstructions instructions;
 
 	private Map<AreaInstruction, List<Geometry>> areas;
 	private Map<WayInstruction, List<LineString>> ways;
 	private Map<LineString, String> names;
+
+	private TextIntersectionChecker textIntersectionChecker;
 
 	public InkscapeConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
 			RenderInstructions instructions,
@@ -97,6 +114,8 @@ public class InkscapeConfigMapRenderer
 	private Layer layer = null;
 	private int id = 1;
 
+	private Layer layerTextBoxes;
+
 	private String id()
 	{
 		return Integer.toString(id++);
@@ -105,6 +124,13 @@ public class InkscapeConfigMapRenderer
 	public void paint(SvgFile svg)
 	{
 		transformer = new CoordinateGeometryTransformer(mercatorImage);
+
+		textIntersectionChecker = new TextIntersectionCheckerTree();
+
+		if (drawTextBoxes) {
+			layerTextBoxes = new Layer("text-boxes");
+			layerTextBoxes.setLabel("Text boxes");
+		}
 
 		int layerNum = 1;
 		for (Instruction instruction : instructions.getInstructions()) {
@@ -124,6 +150,10 @@ public class InkscapeConfigMapRenderer
 				List<Geometry> geometries = areas.get(instruction);
 				render(svg, ai, geometries);
 			}
+		}
+
+		if (drawTextBoxes) {
+			svg.getLayers().add(layerTextBoxes);
 		}
 
 		if (drawBoundingBox) {
@@ -175,6 +205,8 @@ public class InkscapeConfigMapRenderer
 			render(svg, (TwofoldWayStyle) style, strings);
 		} else if (style instanceof DashedWayStyle) {
 			render(svg, (DashedWayStyle) style, strings);
+		} else if (style instanceof TextWayStyle) {
+			render(svg, (TextWayStyle) style, strings);
 		}
 	}
 
@@ -235,6 +267,85 @@ public class InkscapeConfigMapRenderer
 			path.getStyle().setLineCap(LineCap.ROUND);
 			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
+	}
+
+	private void render(SvgFile svg, TextWayStyle style,
+			List<LineString> strings)
+	{
+		for (LineString string : strings) {
+			String name = names.get(string);
+			renderLabel(svg, string, name, style);
+		}
+	}
+
+	private void renderLabel(SvgFile svg, LineString string, String label,
+			TextWayStyle style)
+	{
+		Path2D path = Jts2Awt.getPath(string, mercatorImage);
+		LineString stringImage = (LineString) new CoordinateGeometryTransformer(
+				mercatorImage).transform(string);
+
+		double padding = 5;
+
+		Font font = new Font(style.getFontName(), Font.PLAIN, style.getSize());
+
+		float pathLength = AwtTextUtil.measurePathLength(path);
+		double textLength = AwtTextUtil.getTextWidth(font, label);
+		double paddedTextLength = textLength + 2 * padding;
+
+		if (paddedTextLength > pathLength) {
+			return;
+		}
+
+		double offset = (pathLength - paddedTextLength) / 2;
+
+		BoolResult isReverse = new BoolResult();
+		float[][] boxes = TextUtil.createTextBoxes(stringImage, offset,
+				paddedTextLength, style.getSize(), isReverse);
+
+		if (!textIntersectionChecker.isValid(boxes)) {
+			return;
+		}
+
+		textIntersectionChecker.add(boxes);
+
+		if (drawTextBoxes) {
+			for (float[] box : boxes) {
+				Polygon polygon = GeneralRectangle.createPolygon(box);
+				Path p = JtsToPath.convert(id(), FillRule.EVEN_ODD, polygon);
+				layerTextBoxes.getObjects().add(p);
+				p.setStyle(style(null, WebColors.GREEN.color(), 1, 1, 1, 1));
+				p.getStyle().setLineCap(LineCap.ROUND);
+				p.getStyle().setLineJoin(LineJoin.ROUND);
+			}
+		}
+
+		TextPath line = AwtTextUtil.createLine(path, (float) paddedTextLength,
+				(float) offset);
+		Path2D p = line.getPath();
+
+		if (isReverse.value) {
+			p = AwtTextUtil.reverse(p);
+		}
+
+		Shape shape = AwtTextUtil.createStrokedShape(p, font, label);
+
+		Path labelPath1 = ShapeToPath.convert(id(), FillRule.EVEN_ODD, shape);
+		Path labelPath2 = ShapeToPath.convert(id(), FillRule.EVEN_ODD, shape);
+
+		// we could avoid the duplication with this:
+		// style="paint-order:stroke fill markers", but then it will really only
+		// work in Inkscape
+
+		layer.getObjects().add(labelPath1);
+		labelPath1.setStyle(style(null, style.getColorOutline(), 1, 1, 1,
+				style.getWidthOutline()));
+		labelPath1.getStyle().setLineCap(LineCap.ROUND);
+		labelPath1.getStyle().setLineJoin(LineJoin.ROUND);
+
+		layer.getObjects().add(labelPath2);
+		labelPath2.setStyle(style(style.getColor(), null, 1, 1, 1,
+				style.getWidthOutline()));
 	}
 
 }
