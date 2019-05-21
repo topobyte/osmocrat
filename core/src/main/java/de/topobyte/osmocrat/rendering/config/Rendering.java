@@ -81,7 +81,7 @@ public class Rendering
 		addWay(ri, "highway", "living_street", 6, WHITE.color());
 
 		ri.add(new WayInstruction(new TagSelector("highway", "residential"),
-				new TextWayStyle("Arial", 14, BLACK.color(), 2,
+				new TextWayStyle("Arial", 14, BLACK.color(), 3,
 						WHITE.color())));
 
 		return ri;
