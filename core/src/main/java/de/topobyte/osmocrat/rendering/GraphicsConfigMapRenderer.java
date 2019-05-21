@@ -249,8 +249,7 @@ public class GraphicsConfigMapRenderer
 
 		double padding = 5;
 
-		Font font = g.getFont().deriveFont(style.getSize());
-		font = new Font(style.getFontName(), Font.PLAIN, style.getSize());
+		Font font = new Font(style.getFontName(), Font.PLAIN, style.getSize());
 
 		float pathLength = AwtTextUtil.measurePathLength(path);
 		double textLength = AwtTextUtil.getTextWidth(font, label);
