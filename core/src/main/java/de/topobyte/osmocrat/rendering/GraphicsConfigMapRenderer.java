@@ -236,11 +236,11 @@ public class GraphicsConfigMapRenderer
 	{
 		for (LineString string : strings) {
 			String name = names.get(string);
-			paintLabel(g, string, name, style);
+			renderLabel(g, string, name, style);
 		}
 	}
 
-	private void paintLabel(Graphics2D g, LineString string, String name,
+	private void renderLabel(Graphics2D g, LineString string, String label,
 			TextWayStyle style)
 	{
 		Path2D path = Jts2Awt.getPath(string, mercatorImage);
@@ -253,7 +253,7 @@ public class GraphicsConfigMapRenderer
 		font = new Font(style.getFontName(), Font.PLAIN, style.getSize());
 
 		float pathLength = AwtTextUtil.measurePathLength(path);
-		double textLength = AwtTextUtil.getTextWidth(font, name);
+		double textLength = AwtTextUtil.getTextWidth(font, label);
 		double paddedTextLength = textLength + 2 * padding;
 
 		if (paddedTextLength > pathLength) {
@@ -291,7 +291,7 @@ public class GraphicsConfigMapRenderer
 			p = AwtTextUtil.reverse(p);
 		}
 
-		Shape shape = AwtTextUtil.createStrokedShape(p, font, name);
+		Shape shape = AwtTextUtil.createStrokedShape(p, font, label);
 
 		g.setColor(AwtColors.convert(style.getColorOutline()));
 		g.setStroke(new BasicStroke(style.getWidthOutline(),
