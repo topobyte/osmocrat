@@ -124,7 +124,7 @@ public class Rendering
 		}
 
 		ri.add(new WayInstruction(new TagSelector(key, value),
-				new DashedWayStyle(width, color, dashArray)));
+				new DashedWayStyle(width, color, dashArray, 0)));
 	}
 
 	private static void addWay(RenderInstructions ri, String key, String value,

@@ -27,12 +27,15 @@ public class DashedWayStyle implements WayStyle
 	private int width;
 	private ColorCode color;
 	private List<Float> dashArray;
+	private float dashPhase;
 
-	public DashedWayStyle(int width, ColorCode color, List<Float> dashArray)
+	public DashedWayStyle(int width, ColorCode color, List<Float> dashArray,
+			float dashPhase)
 	{
 		this.width = width;
 		this.color = color;
 		this.dashArray = dashArray;
+		this.dashPhase = dashPhase;
 	}
 
 	public int getWidth()
@@ -63,6 +66,16 @@ public class DashedWayStyle implements WayStyle
 	public void setDashArray(List<Float> dashArray)
 	{
 		this.dashArray = dashArray;
+	}
+
+	public float getDashPhase()
+	{
+		return dashPhase;
+	}
+
+	public void setDashPhase(float dashPhase)
+	{
+		this.dashPhase = dashPhase;
 	}
 
 }

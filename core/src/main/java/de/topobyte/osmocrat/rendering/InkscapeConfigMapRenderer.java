@@ -242,6 +242,7 @@ public class InkscapeConfigMapRenderer
 			path.getStyle().setLineCap(LineCap.ROUND);
 			path.getStyle().setLineJoin(LineJoin.ROUND);
 			path.getStyle().setDashArray(dash);
+			path.getStyle().setDashOffset(style.getDashPhase());
 		}
 	}
 

@@ -224,7 +224,7 @@ public class GraphicsConfigMapRenderer
 
 		g.setColor(AwtColors.convert(style.getColor()));
 		g.setStroke(new BasicStroke(style.getWidth(), BasicStroke.CAP_ROUND,
-				BasicStroke.JOIN_ROUND, 10.0f, dash, 0f));
+				BasicStroke.JOIN_ROUND, 10.0f, dash, style.getDashPhase()));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
