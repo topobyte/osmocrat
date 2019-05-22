@@ -236,6 +236,9 @@ public class GraphicsConfigMapRenderer
 	{
 		for (LineString string : strings) {
 			String name = names.get(string);
+			if (name == null) {
+				continue;
+			}
 			renderLabel(g, string, name, style);
 		}
 	}

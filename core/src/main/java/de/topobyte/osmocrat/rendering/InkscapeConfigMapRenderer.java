@@ -275,6 +275,9 @@ public class InkscapeConfigMapRenderer
 	{
 		for (LineString string : strings) {
 			String name = names.get(string);
+			if (name == null) {
+				continue;
+			}
 			renderLabel(svg, string, name, style);
 		}
 	}
