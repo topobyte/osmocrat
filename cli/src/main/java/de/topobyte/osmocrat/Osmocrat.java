@@ -36,6 +36,8 @@ public class Osmocrat
 			DelegateExeOptions options = new DelegateExeOptions();
 			options.addCommand("gui", OsmocratGui.OPTIONS_FACTORY,
 					OsmocratGui.class);
+			options.addCommand("overpass", OsmocratOverpass.OPTIONS_FACTORY,
+					OsmocratOverpass.class);
 			return options;
 		}
 

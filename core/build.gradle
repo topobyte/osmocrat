@@ -15,7 +15,7 @@ dependencies {
     compile 'de.topobyte:jeography-gis:0.1.2'
     compile 'de.topobyte:chromaticity-core:0.0.2'
     compile 'de.topobyte:chromaticity-awt:0.0.2'
-    compile 'de.topobyte:overpass-utils:0.0.1'
+    compile 'de.topobyte:overpass-utils:0.0.2'
     compile 'de.topobyte:inkscape4j-core:0.0.6'
     compile 'de.topobyte:inkscape4j-jts:0.0.6'
     compile 'de.topobyte:inkscape4j-awt:0.0.6'
