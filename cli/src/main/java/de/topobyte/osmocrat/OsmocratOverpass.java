@@ -117,6 +117,7 @@ public class OsmocratOverpass
 			Files.copy(input, pathOutput);
 		} catch (IOException e) {
 			logger.error("Error while requesting data", e);
+			System.exit(1);
 		}
 	}
 
@@ -142,6 +143,7 @@ public class OsmocratOverpass
 			Files.copy(input, pathOutput);
 		} catch (IOException e) {
 			logger.error("Error while requesting data", e);
+			System.exit(1);
 		}
 	}
 
