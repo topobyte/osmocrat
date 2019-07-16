@@ -26,8 +26,16 @@ the available tasks are `gui` and `overpass` which can be run like this:
 
 and like this respectively:
 
-    ./scripts/osmocrat overpass --output /path/to/some/osm/data/file.tbo
+    ./scripts/osmocrat overpass --output /path/to/some/osm/data/file.osm
                                 --bbox lon1,lat1,lon2,lat2
 
-    ./scripts/osmocrat overpass --output /path/to/some/osm/data/file.tbo
+    ./scripts/osmocrat overpass --output /path/to/some/osm/data/file.osm
                                 --boundary /path/to/some/wkt/polygon.wkt
+
+To convert the downloaded files to other formats than `.osm`, use
+[topobyte/osm4j-utils](https://github.com/topobyte/osm4j-utils):
+
+    OsmCat --input /path/to/some/osm/data/file.osm
+           --input-format xml
+           --output /path/to/some/osm/data/file.tbo
+           --output-format tbo
