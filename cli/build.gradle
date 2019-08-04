@@ -1,3 +1,23 @@
+buildscript {
+    repositories {
+        maven { url 'http://mvn.topobyte.de' }
+    }
+    dependencies {
+        classpath 'de.topobyte:gradle-launch-and-install-plugin:0.0.3'
+    }
+}
+
+apply plugin: 'application'
+apply plugin: 'de.topobyte.launch-and-install-gradle-plugin'
+
+startScripts.enabled = false
+
+launchAndInstall {
+    installationPath = 'topobyte/osmocrat'
+    makeselfLabel = 'Osmocrat'
+    createScript(project, 'de.topobyte.osmocrat.Osmocrat', 'osmocrat')
+}
+
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
