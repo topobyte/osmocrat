@@ -56,25 +56,25 @@ public class ConfigMapRenderer
 {
 
 	// This will be used to map geometry coordinates to screen coordinates
-	private MercatorImage mercatorImage;
+	protected MercatorImage mercatorImage;
 
 	// We need to keep the reference to the bounding box, so that we can create
 	// a new MercatorImage if the size of our panel changes
-	private BBox bbox;
+	protected BBox bbox;
 
 	// The data set will be used as entity provider when building geometries
-	private InMemoryListDataSet data;
+	protected InMemoryListDataSet data;
 
-	private boolean drawBoundingBox = true;
+	protected boolean drawBoundingBox = true;
 
-	private RenderInstructions instructions;
+	protected RenderInstructions instructions;
 
 	// We build the geometries to be rendered during construction and store them
 	// in these fields so that we don't have to recompute everything when
 	// rendering.
-	private Map<AreaInstruction, List<Geometry>> areas = new HashMap<>();
-	private Map<WayInstruction, List<LineString>> ways = new HashMap<>();
-	private Map<LineString, String> names = new HashMap<>();
+	protected Map<AreaInstruction, List<Geometry>> areas = new HashMap<>();
+	protected Map<WayInstruction, List<LineString>> ways = new HashMap<>();
+	protected Map<LineString, String> names = new HashMap<>();
 
 	public ConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
 			InMemoryListDataSet data, RenderInstructions instructions)
@@ -248,10 +248,10 @@ public class ConfigMapRenderer
 		renderer.paint(svg);
 	}
 
-	private WayBuilder wayBuilder = new WayBuilder();
-	private RegionBuilder regionBuilder = new RegionBuilder();
+	protected WayBuilder wayBuilder = new WayBuilder();
+	protected RegionBuilder regionBuilder = new RegionBuilder();
 
-	private Collection<LineString> getLine(OsmWay way)
+	protected Collection<LineString> getLine(OsmWay way)
 	{
 		List<LineString> results = new ArrayList<>();
 		try {
@@ -266,7 +266,7 @@ public class ConfigMapRenderer
 		return results;
 	}
 
-	private MultiPolygon getPolygon(OsmWay way)
+	protected MultiPolygon getPolygon(OsmWay way)
 	{
 		try {
 			RegionBuilderResult region = regionBuilder.build(way, data);
@@ -276,7 +276,7 @@ public class ConfigMapRenderer
 		}
 	}
 
-	private MultiPolygon getPolygon(OsmRelation relation)
+	protected MultiPolygon getPolygon(OsmRelation relation)
 	{
 		try {
 			RegionBuilderResult region = regionBuilder.build(relation, data);
