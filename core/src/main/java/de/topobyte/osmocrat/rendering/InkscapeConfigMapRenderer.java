@@ -37,6 +37,8 @@ import de.topobyte.inkscape4j.JtsToPath;
 import de.topobyte.inkscape4j.Layer;
 import de.topobyte.inkscape4j.ShapeToPath;
 import de.topobyte.inkscape4j.SvgFile;
+import de.topobyte.inkscape4j.ids.IdFactory;
+import de.topobyte.inkscape4j.ids.SimpleIdFactory;
 import de.topobyte.inkscape4j.path.FillRule;
 import de.topobyte.inkscape4j.path.Path;
 import de.topobyte.inkscape4j.style.LineCap;
@@ -111,15 +113,10 @@ public class InkscapeConfigMapRenderer
 
 	private CoordinateGeometryTransformer transformer;
 
+	private IdFactory idFactory = new SimpleIdFactory();
 	private Layer layer = null;
-	private int id = 1;
 
 	private Layer layerTextBoxes;
-
-	private String id()
-	{
-		return Integer.toString(id++);
-	}
 
 	public void paint(SvgFile svg)
 	{
@@ -187,7 +184,8 @@ public class InkscapeConfigMapRenderer
 	{
 		for (Geometry area : geometries) {
 			Geometry transformed = transformer.transform(area);
-			Path path = JtsToPath.convert(id(), FillRule.EVEN_ODD, transformed);
+			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
+					transformed);
 			layer.getObjects().add(path);
 			path.setStyle(style(style.getColor(), null, 1, 1, 1, 0));
 			path.getStyle().setLineCap(LineCap.ROUND);
@@ -215,7 +213,8 @@ public class InkscapeConfigMapRenderer
 	{
 		for (LineString string : strings) {
 			Geometry transformed = transformer.transform(string);
-			Path path = JtsToPath.convert(id(), FillRule.EVEN_ODD, transformed);
+			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
+					transformed);
 			layer.getObjects().add(path);
 			path.setStyle(
 					style(null, style.getColor(), 1, 1, 1, style.getWidth()));
@@ -235,7 +234,8 @@ public class InkscapeConfigMapRenderer
 
 		for (LineString string : strings) {
 			Geometry transformed = transformer.transform(string);
-			Path path = JtsToPath.convert(id(), FillRule.EVEN_ODD, transformed);
+			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
+					transformed);
 			layer.getObjects().add(path);
 			path.setStyle(
 					style(null, style.getColor(), 1, 1, 1, style.getWidth()));
@@ -251,7 +251,8 @@ public class InkscapeConfigMapRenderer
 	{
 		for (LineString string : strings) {
 			Geometry transformed = transformer.transform(string);
-			Path path = JtsToPath.convert(id(), FillRule.EVEN_ODD, transformed);
+			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
+					transformed);
 			layer.getObjects().add(path);
 			path.setStyle(
 					style(null, style.getBg(), 1, 1, 1, style.getWidthBG()));
@@ -261,7 +262,8 @@ public class InkscapeConfigMapRenderer
 
 		for (LineString string : strings) {
 			Geometry transformed = transformer.transform(string);
-			Path path = JtsToPath.convert(id(), FillRule.EVEN_ODD, transformed);
+			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
+					transformed);
 			layer.getObjects().add(path);
 			path.setStyle(
 					style(null, style.getFg(), 1, 1, 1, style.getWidthFG()));
@@ -316,7 +318,8 @@ public class InkscapeConfigMapRenderer
 		if (drawTextBoxes) {
 			for (float[] box : boxes) {
 				Polygon polygon = GeneralRectangle.createPolygon(box);
-				Path p = JtsToPath.convert(id(), FillRule.EVEN_ODD, polygon);
+				Path p = JtsToPath.convert(idFactory.nextId(),
+						FillRule.EVEN_ODD, polygon);
 				layerTextBoxes.getObjects().add(p);
 				p.setStyle(style(null, WebColors.GREEN.color(), 1, 1, 1, 1));
 				p.getStyle().setLineCap(LineCap.ROUND);
@@ -334,8 +337,10 @@ public class InkscapeConfigMapRenderer
 
 		Shape shape = AwtTextUtil.createStrokedShape(p, font, label);
 
-		Path labelPath1 = ShapeToPath.convert(id(), FillRule.EVEN_ODD, shape);
-		Path labelPath2 = ShapeToPath.convert(id(), FillRule.EVEN_ODD, shape);
+		Path labelPath1 = ShapeToPath.convert(idFactory.nextId(),
+				FillRule.EVEN_ODD, shape);
+		Path labelPath2 = ShapeToPath.convert(idFactory.nextId(),
+				FillRule.EVEN_ODD, shape);
 
 		// we could avoid the duplication with this:
 		// style="paint-order:stroke fill markers", but then it will really only
