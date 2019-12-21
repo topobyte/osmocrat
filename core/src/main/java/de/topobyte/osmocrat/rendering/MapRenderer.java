@@ -346,7 +346,7 @@ public class MapRenderer extends JPanel
 			if (lines.getLinearRing() != null) {
 				results.add(lines.getLinearRing());
 			}
-		} catch (EntityNotFoundException e) {
+		} catch (Throwable e) {
 			// ignore
 		}
 		return results;
@@ -357,7 +357,7 @@ public class MapRenderer extends JPanel
 		try {
 			RegionBuilderResult region = regionBuilder.build(way, data);
 			return region.getMultiPolygon();
-		} catch (EntityNotFoundException e) {
+		} catch (Throwable e) {
 			return null;
 		}
 	}
@@ -367,7 +367,7 @@ public class MapRenderer extends JPanel
 		try {
 			RegionBuilderResult region = regionBuilder.build(relation, data);
 			return region.getMultiPolygon();
-		} catch (EntityNotFoundException e) {
+		} catch (Throwable e) {
 			return null;
 		}
 	}
