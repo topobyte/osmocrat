@@ -260,7 +260,7 @@ public class ConfigMapRenderer
 			if (lines.getLinearRing() != null) {
 				results.add(lines.getLinearRing());
 			}
-		} catch (EntityNotFoundException e) {
+		} catch (Throwable e) {
 			// ignore
 		}
 		return results;
@@ -271,7 +271,7 @@ public class ConfigMapRenderer
 		try {
 			RegionBuilderResult region = regionBuilder.build(way, data);
 			return region.getMultiPolygon();
-		} catch (EntityNotFoundException e) {
+		} catch (Throwable e) {
 			return null;
 		}
 	}
@@ -281,7 +281,7 @@ public class ConfigMapRenderer
 		try {
 			RegionBuilderResult region = regionBuilder.build(relation, data);
 			return region.getMultiPolygon();
-		} catch (EntityNotFoundException e) {
+		} catch (Throwable e) {
 			return null;
 		}
 	}
