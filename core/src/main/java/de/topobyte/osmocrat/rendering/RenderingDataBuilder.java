@@ -50,10 +50,10 @@ import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.Instructions;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 
-public class RenderingData
+public class RenderingDataBuilder
 {
 
-	final static Logger logger = LoggerFactory.getLogger(RenderingData.class);
+	final static Logger logger = LoggerFactory.getLogger(RenderingDataBuilder.class);
 
 	private MercatorImage mercatorImage;
 	private InMemoryListDataSet data;
@@ -61,7 +61,7 @@ public class RenderingData
 
 	private CachedRenderingDataSource renderingData = new CachedRenderingDataSource();
 
-	public RenderingData(MercatorImage mercatorImage, InMemoryListDataSet data,
+	public RenderingDataBuilder(MercatorImage mercatorImage, InMemoryListDataSet data,
 			RenderInstructions instructions)
 	{
 		this.mercatorImage = mercatorImage;

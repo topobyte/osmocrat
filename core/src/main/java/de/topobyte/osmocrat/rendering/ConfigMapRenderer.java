@@ -62,7 +62,7 @@ public class ConfigMapRenderer
 			RenderInstructions instructions)
 	{
 		logger.info("building rendering data...");
-		RenderingData dataBuilder = new RenderingData(mercatorImage, data,
+		RenderingDataBuilder dataBuilder = new RenderingDataBuilder(mercatorImage, data,
 				instructions);
 		dataBuilder.buildRenderingData();
 		CachedRenderingDataSource renderingData = dataBuilder
