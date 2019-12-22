@@ -57,7 +57,7 @@ public class ConfigMapRenderer
 		return renderer;
 	}
 
-	private static CachedRenderingDataSource buildRenderingData(
+	public static CachedRenderingDataSource buildRenderingData(
 			MercatorImage mercatorImage, InMemoryListDataSet data,
 			RenderInstructions instructions)
 	{
