@@ -192,6 +192,8 @@ public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 			dash[i] = dashArray.get(i);
 		}
 
+		DashArrays.scale(dash, scaleLines);
+
 		for (LineString string : strings) {
 			Geometry transformed = transformer.transform(string);
 			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
@@ -202,7 +204,7 @@ public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 			path.getStyle().setLineCap(LineCap.ROUND);
 			path.getStyle().setLineJoin(LineJoin.ROUND);
 			path.getStyle().setDashArray(dash);
-			path.getStyle().setDashOffset(style.getDashPhase());
+			path.getStyle().setDashOffset(style.getDashPhase() * scaleLines);
 		}
 	}
 

@@ -172,10 +172,12 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 			dash[i] = dashArray.get(i);
 		}
 
+		DashArrays.scale(dash, scaleLines);
+
 		g.setColor(AwtColors.convert(style.getColor()));
 		g.setStroke(new BasicStroke(style.getWidth() * scaleLines,
 				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, dash,
-				style.getDashPhase()));
+				style.getDashPhase() * scaleLines));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
