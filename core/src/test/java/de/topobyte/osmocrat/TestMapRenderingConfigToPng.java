@@ -35,6 +35,8 @@ import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.dataset.ListDataSetLoader;
 import de.topobyte.osm4j.xml.dynsax.OsmXmlReader;
 import de.topobyte.osmocrat.rendering.ConfigMapRenderer;
+import de.topobyte.osmocrat.rendering.GraphicsConfigMapRenderer;
+import de.topobyte.osmocrat.rendering.config.RenderInstructions;
 import de.topobyte.osmocrat.rendering.config.Rendering;
 import de.topobyte.overpass.OverpassUtil;
 
@@ -58,6 +60,7 @@ public class TestMapRenderingConfigToPng
 				true);
 
 		MercatorImage mapImage = new MercatorImage(bbox, width, height);
+		RenderInstructions instructions = Rendering.style2();
 
 		BufferedImage image = new BufferedImage(width, height,
 				BufferedImage.TYPE_4BYTE_ABGR);
@@ -68,8 +71,11 @@ public class TestMapRenderingConfigToPng
 		graphics.setColor(cBackground);
 		graphics.fillRect(0, 0, width, height);
 
-		ConfigMapRenderer configRenderer = new ConfigMapRenderer(bbox, mapImage,
-				data, Rendering.style2());
+		GraphicsConfigMapRenderer configRenderer = ConfigMapRenderer
+				.setupGraphicsRenderer(bbox, mapImage, data, instructions);
+		configRenderer.setScaleLines(1);
+		configRenderer.setScaleText(1);
+
 		configRenderer.paint(graphics);
 
 		Path file = Files.createTempFile("map", ".png");

@@ -38,6 +38,8 @@ import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.dataset.ListDataSetLoader;
 import de.topobyte.osm4j.xml.dynsax.OsmXmlReader;
 import de.topobyte.osmocrat.rendering.ConfigMapRenderer;
+import de.topobyte.osmocrat.rendering.InkscapeConfigMapRenderer;
+import de.topobyte.osmocrat.rendering.config.RenderInstructions;
 import de.topobyte.osmocrat.rendering.config.Rendering;
 import de.topobyte.overpass.OverpassUtil;
 
@@ -61,6 +63,7 @@ public class TestMapRenderingConfigToSvg
 				true);
 
 		MercatorImage mapImage = new MercatorImage(bbox, width, height);
+		RenderInstructions instructions = Rendering.style2();
 
 		SvgFile svg = new SvgFile();
 
@@ -75,8 +78,10 @@ public class TestMapRenderingConfigToSvg
 		rect.setStyle(style(color(0xEEEEEE), null, 1, 1, 1, 0));
 		layerBackground.getObjects().add(rect);
 
-		ConfigMapRenderer configRenderer = new ConfigMapRenderer(bbox, mapImage,
-				data, Rendering.style2());
+		InkscapeConfigMapRenderer configRenderer = ConfigMapRenderer
+				.setupInkscapeRenderer(bbox, mapImage, data, instructions);
+		configRenderer.setScaleLines(1);
+		configRenderer.setScaleText(1);
 		configRenderer.paint(svg);
 
 		Path file = Files.createTempFile("map", ".svg");

@@ -34,7 +34,6 @@ import com.vividsolutions.jts.geom.Polygon;
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.awt.util.GraphicsUtil;
 import de.topobyte.chromaticity.AwtColors;
-import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.chromaticity.WebColors;
 import de.topobyte.jgs.transform.IdentityCoordinateTransformer;
 import de.topobyte.jts.utils.transform.CoordinateGeometryTransformer;
@@ -53,82 +52,18 @@ import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
 import de.topobyte.osmocrat.text.BoolResult;
 import de.topobyte.osmocrat.text.GeneralRectangle;
-import de.topobyte.osmocrat.text.TextIntersectionChecker;
 import de.topobyte.osmocrat.text.TextIntersectionCheckerTree;
 import de.topobyte.osmocrat.text.TextUtil;
 import de.topobyte.osmocrat.text.awt.AwtTextUtil;
 import de.topobyte.osmocrat.text.awt.TextPath;
 
-public class GraphicsConfigMapRenderer
+public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 {
-
-	// Some fields that define the map colors and street line widths
-	private ColorCode cBBox = WebColors.BLUE.color();
-
-	// This will be used to map geometry coordinates to screen coordinates
-	private MercatorImage mercatorImage;
-
-	private BBox bbox;
-
-	private boolean drawBoundingBox = true;
-	private boolean drawTextBoxes = false;
-
-	private RenderInstructions instructions;
-
-	private RenderingDataSource renderingData;
-
-	private TextIntersectionChecker textIntersectionChecker;
-
-	private float scaleLines = 1;
-	private float scaleText = 1;
 
 	public GraphicsConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
 			RenderInstructions instructions, RenderingDataSource renderingData)
 	{
-		this.bbox = bbox;
-		this.mercatorImage = mercatorImage;
-		this.instructions = instructions;
-		this.renderingData = renderingData;
-	}
-
-	public boolean isDrawBoundingBox()
-	{
-		return drawBoundingBox;
-	}
-
-	public void setDrawBoundingBox(boolean drawBoundingBox)
-	{
-		this.drawBoundingBox = drawBoundingBox;
-	}
-
-	public boolean isDrawTextBoxes()
-	{
-		return drawTextBoxes;
-	}
-
-	public void setDrawTextBoxes(boolean drawTextBoxes)
-	{
-		this.drawTextBoxes = drawTextBoxes;
-	}
-
-	public float getScaleLines()
-	{
-		return scaleLines;
-	}
-
-	public void setScaleLines(float scaleLines)
-	{
-		this.scaleLines = scaleLines;
-	}
-
-	public float getScaleText()
-	{
-		return scaleText;
-	}
-
-	public void setScaleText(float scaleText)
-	{
-		this.scaleText = scaleText;
+		super(bbox, mercatorImage, instructions, renderingData);
 	}
 
 	public void paint(Graphics graphics)

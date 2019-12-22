@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiPolygon;
@@ -49,6 +52,8 @@ import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 
 public class RenderingData
 {
+
+	final static Logger logger = LoggerFactory.getLogger(RenderingData.class);
 
 	private MercatorImage mercatorImage;
 	private InMemoryListDataSet data;
@@ -97,7 +102,7 @@ public class RenderingData
 			renderingData.getWays().put(instruction, new ArrayList<>());
 		}
 
-		System.out.println("area relations...");
+		logger.info("area relations...");
 		// Collect areas from relation areas...
 		for (OsmRelation relation : data.getRelations()) {
 			Map<String, String> tags = OsmModelUtil.getTagsAsMap(relation);
@@ -136,7 +141,7 @@ public class RenderingData
 			}
 		}
 
-		System.out.println("area ways...");
+		logger.info("area ways...");
 		// ... and also from way areas
 		for (OsmWay way : data.getWays()) {
 			Map<String, String> tags = OsmModelUtil.getTagsAsMap(way);
@@ -161,7 +166,7 @@ public class RenderingData
 			}
 		}
 
-		System.out.println("ways...");
+		logger.info("ways...");
 		// Collect ways
 		for (OsmWay way : data.getWays()) {
 			Map<String, String> tags = OsmModelUtil.getTagsAsMap(way);

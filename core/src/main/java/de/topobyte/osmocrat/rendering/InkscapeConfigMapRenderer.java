@@ -30,7 +30,6 @@ import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Polygon;
 
 import de.topobyte.adt.geo.BBox;
-import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.chromaticity.WebColors;
 import de.topobyte.inkscape4j.JtsToPath;
 import de.topobyte.inkscape4j.Layer;
@@ -58,72 +57,18 @@ import de.topobyte.osmocrat.rendering.config.instructions.ways.TwofoldWayStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.WayStyle;
 import de.topobyte.osmocrat.text.BoolResult;
 import de.topobyte.osmocrat.text.GeneralRectangle;
-import de.topobyte.osmocrat.text.TextIntersectionChecker;
 import de.topobyte.osmocrat.text.TextIntersectionCheckerTree;
 import de.topobyte.osmocrat.text.TextUtil;
 import de.topobyte.osmocrat.text.awt.AwtTextUtil;
 import de.topobyte.osmocrat.text.awt.TextPath;
 
-public class InkscapeConfigMapRenderer
+public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 {
-
-	// Some fields that define the map colors and street line widths
-	private ColorCode cBBox = WebColors.BLUE.color();
-
-	// This will be used to map geometry coordinates to screen coordinates
-	private MercatorImage mercatorImage;
-
-	private BBox bbox;
-
-	private boolean drawBoundingBox = true;
-	private boolean drawTextBoxes = false;
-
-	private RenderInstructions instructions;
-
-	private RenderingDataSource renderingData;
-
-	private TextIntersectionChecker textIntersectionChecker;
-
-	private float scaleLines = 1;
-	private float scaleText = 1;
 
 	public InkscapeConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
 			RenderInstructions instructions, RenderingDataSource renderingData)
 	{
-		this.bbox = bbox;
-		this.mercatorImage = mercatorImage;
-		this.instructions = instructions;
-		this.renderingData = renderingData;
-	}
-
-	public boolean isDrawBoundingBox()
-	{
-		return drawBoundingBox;
-	}
-
-	public void setDrawBoundingBox(boolean drawBoundingBox)
-	{
-		this.drawBoundingBox = drawBoundingBox;
-	}
-
-	public float getScaleLines()
-	{
-		return scaleLines;
-	}
-
-	public void setScaleLines(float scaleLines)
-	{
-		this.scaleLines = scaleLines;
-	}
-
-	public float getScaleText()
-	{
-		return scaleText;
-	}
-
-	public void setScaleText(float scaleText)
-	{
-		this.scaleText = scaleText;
+		super(bbox, mercatorImage, instructions, renderingData);
 	}
 
 	private CoordinateGeometryTransformer transformer;

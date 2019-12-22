@@ -35,9 +35,9 @@ public class ConfigMapRendererPanel extends JPanel
 	// Some fields that define the map colors and street line widths
 	private Color cBackground = new Color(0xEEEEEE);
 
-	private ConfigMapRenderer configRenderer;
+	private GraphicsConfigMapRenderer configRenderer;
 
-	public ConfigMapRendererPanel(ConfigMapRenderer configRenderer)
+	public ConfigMapRendererPanel(GraphicsConfigMapRenderer configRenderer)
 	{
 		this.configRenderer = configRenderer;
 
