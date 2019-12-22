@@ -270,7 +270,7 @@ public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 
 		BoolResult isReverse = new BoolResult();
 		float[][] boxes = TextUtil.createTextBoxes(stringImage, offset,
-				paddedTextLength, style.getSize(), isReverse);
+				paddedTextLength, fontSize, isReverse);
 
 		if (!textIntersectionChecker.isValid(boxes)) {
 			return;
