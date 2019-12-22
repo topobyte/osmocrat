@@ -75,6 +75,7 @@ public class OsmocratMainUI
 
 	private BBox bbox = null;
 	private Coordinate meanNodes = null;
+	private BBox bbox80percent = null;
 
 	public OsmocratMainUI(InMemoryListDataSet data)
 	{
@@ -306,10 +307,14 @@ public class OsmocratMainUI
 
 	public Coordinate getNodeMedian()
 	{
-		if (meanNodes == null) {
-			calculateNodeMedian();
-		}
+		calculateDataCharacteristics();
 		return meanNodes;
+	}
+
+	public BBox get80PercentArea()
+	{
+		calculateDataCharacteristics();
+		return bbox80percent;
 	}
 
 	private void calculateBoudingBox()
@@ -324,7 +329,19 @@ public class OsmocratMainUI
 		bbox = new BBox(envelope);
 	}
 
-	public void calculateNodeMedian()
+	private boolean calculatedCharacteristics = false;
+
+	public void calculateDataCharacteristics()
+	{
+		if (calculatedCharacteristics) {
+			return;
+		}
+
+		calculateDataCharacteristicsInternal();
+		calculatedCharacteristics = true;
+	}
+
+	private void calculateDataCharacteristicsInternal()
 	{
 		List<OsmNode> nodes = data.getNodes();
 
@@ -343,6 +360,13 @@ public class OsmocratMainUI
 		double meanLon = lons.get(lons.size() / 2);
 
 		meanNodes = new Coordinate(meanLon, meanLat);
+
+		double d = 0.8;
+		int n1 = (int) Math.round(nodes.size() * (1 - d));
+		int n2 = (int) Math.round(nodes.size() * d);
+
+		bbox80percent = new BBox(lons.get(n1), lats.get(n1), lons.get(n2),
+				lats.get(n2));
 	}
 
 }

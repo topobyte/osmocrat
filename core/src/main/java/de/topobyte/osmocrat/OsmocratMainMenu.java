@@ -26,6 +26,7 @@ import de.topobyte.osmocrat.action.ExitAction;
 import de.topobyte.osmocrat.action.RenderMapAction;
 import de.topobyte.osmocrat.action.RenderMapOfMedianRegionAction;
 import de.topobyte.osmocrat.action.RenderOverviewAction;
+import de.topobyte.osmocrat.action.RenderOverviewOf80Region;
 
 public class OsmocratMainMenu extends JMenuBar
 {
@@ -43,6 +44,7 @@ public class OsmocratMainMenu extends JMenuBar
 		add(menuTools);
 
 		menuTools.add(new JMenuItem(new RenderOverviewAction(osmocrat)));
+		menuTools.add(new JMenuItem(new RenderOverviewOf80Region(osmocrat)));
 		menuTools.add(
 				new JMenuItem(new RenderMapOfMedianRegionAction(osmocrat)));
 		menuTools.add(new JMenuItem(new RenderMapAction(osmocrat)));
