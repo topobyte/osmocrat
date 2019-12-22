@@ -82,6 +82,9 @@ public class GraphicsConfigMapRenderer
 
 	private TextIntersectionChecker textIntersectionChecker;
 
+	private float scaleLines = 1;
+	private float scaleText = 1;
+
 	public GraphicsConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
 			RenderInstructions instructions,
 			Map<AreaInstruction, List<Geometry>> areas,
@@ -114,6 +117,26 @@ public class GraphicsConfigMapRenderer
 	public void setDrawTextBoxes(boolean drawTextBoxes)
 	{
 		this.drawTextBoxes = drawTextBoxes;
+	}
+
+	public float getScaleLines()
+	{
+		return scaleLines;
+	}
+
+	public void setScaleLines(float scaleLines)
+	{
+		this.scaleLines = scaleLines;
+	}
+
+	public float getScaleText()
+	{
+		return scaleText;
+	}
+
+	public void setScaleText(float scaleText)
+	{
+		this.scaleText = scaleText;
 	}
 
 	public void paint(Graphics graphics)
@@ -184,8 +207,8 @@ public class GraphicsConfigMapRenderer
 			List<LineString> strings)
 	{
 		g.setColor(AwtColors.convert(style.getColor()));
-		g.setStroke(new BasicStroke(style.getWidth(), BasicStroke.CAP_ROUND,
-				BasicStroke.JOIN_ROUND));
+		g.setStroke(new BasicStroke(style.getWidth() * scaleLines,
+				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
@@ -196,8 +219,8 @@ public class GraphicsConfigMapRenderer
 			List<LineString> strings)
 	{
 		g.setColor(AwtColors.convert(style.getBg()));
-		g.setStroke(new BasicStroke(style.getWidthBG(), BasicStroke.CAP_ROUND,
-				BasicStroke.JOIN_ROUND));
+		g.setStroke(new BasicStroke(style.getWidthBG() * scaleLines,
+				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
@@ -205,8 +228,8 @@ public class GraphicsConfigMapRenderer
 		}
 
 		g.setColor(AwtColors.convert(style.getFg()));
-		g.setStroke(new BasicStroke(style.getWidthFG(), BasicStroke.CAP_ROUND,
-				BasicStroke.JOIN_ROUND));
+		g.setStroke(new BasicStroke(style.getWidthFG() * scaleLines,
+				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
@@ -223,8 +246,9 @@ public class GraphicsConfigMapRenderer
 		}
 
 		g.setColor(AwtColors.convert(style.getColor()));
-		g.setStroke(new BasicStroke(style.getWidth(), BasicStroke.CAP_ROUND,
-				BasicStroke.JOIN_ROUND, 10.0f, dash, style.getDashPhase()));
+		g.setStroke(new BasicStroke(style.getWidth() * scaleLines,
+				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, dash,
+				style.getDashPhase()));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
@@ -250,9 +274,10 @@ public class GraphicsConfigMapRenderer
 		LineString stringImage = (LineString) new CoordinateGeometryTransformer(
 				mercatorImage).transform(string);
 
-		double padding = 5;
+		double padding = 5 * scaleText;
 
-		Font font = new Font(style.getFontName(), Font.PLAIN, style.getSize());
+		int fontSize = (int) (style.getSize() * scaleText + 0.5);
+		Font font = new Font(style.getFontName(), Font.PLAIN, fontSize);
 
 		float pathLength = AwtTextUtil.measurePathLength(path);
 		double textLength = AwtTextUtil.getTextWidth(font, label);
@@ -296,7 +321,7 @@ public class GraphicsConfigMapRenderer
 		Shape shape = AwtTextUtil.createStrokedShape(p, font, label);
 
 		g.setColor(AwtColors.convert(style.getColorOutline()));
-		g.setStroke(new BasicStroke(style.getWidthOutline(),
+		g.setStroke(new BasicStroke(style.getWidthOutline() * getScaleText(),
 				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		g.draw(shape);
 

@@ -69,6 +69,9 @@ public class ConfigMapRenderer
 
 	protected RenderInstructions instructions;
 
+	protected float scaleLines = 1;
+	protected float scaleText = 1;
+
 	// We build the geometries to be rendered during construction and store them
 	// in these fields so that we don't have to recompute everything when
 	// rendering.
@@ -97,6 +100,26 @@ public class ConfigMapRenderer
 	public void setDrawBoundingBox(boolean drawBoundingBox)
 	{
 		this.drawBoundingBox = drawBoundingBox;
+	}
+
+	public float getScaleLines()
+	{
+		return scaleLines;
+	}
+
+	public void setScaleLines(float scaleLines)
+	{
+		this.scaleLines = scaleLines;
+	}
+
+	public float getScaleText()
+	{
+		return scaleText;
+	}
+
+	public void setScaleText(float scaleText)
+	{
+		this.scaleText = scaleText;
 	}
 
 	private void buildRenderingData()
@@ -237,6 +260,8 @@ public class ConfigMapRenderer
 		Graphics2D g = (Graphics2D) graphics;
 		GraphicsConfigMapRenderer renderer = new GraphicsConfigMapRenderer(bbox,
 				mercatorImage, instructions, areas, ways, names);
+		renderer.setScaleLines(scaleLines);
+		renderer.setScaleText(scaleText);
 		renderer.setDrawBoundingBox(drawBoundingBox);
 		renderer.paint(g);
 	}
@@ -245,6 +270,8 @@ public class ConfigMapRenderer
 	{
 		InkscapeConfigMapRenderer renderer = new InkscapeConfigMapRenderer(bbox,
 				mercatorImage, instructions, areas, ways, names);
+		renderer.setScaleLines(scaleLines);
+		renderer.setScaleText(scaleText);
 		renderer.paint(svg);
 	}
 

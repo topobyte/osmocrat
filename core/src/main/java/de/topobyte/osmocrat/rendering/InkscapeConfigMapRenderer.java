@@ -87,6 +87,9 @@ public class InkscapeConfigMapRenderer
 
 	private TextIntersectionChecker textIntersectionChecker;
 
+	private float scaleLines = 1;
+	private float scaleText = 1;
+
 	public InkscapeConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
 			RenderInstructions instructions,
 			Map<AreaInstruction, List<Geometry>> areas,
@@ -109,6 +112,26 @@ public class InkscapeConfigMapRenderer
 	public void setDrawBoundingBox(boolean drawBoundingBox)
 	{
 		this.drawBoundingBox = drawBoundingBox;
+	}
+
+	public float getScaleLines()
+	{
+		return scaleLines;
+	}
+
+	public void setScaleLines(float scaleLines)
+	{
+		this.scaleLines = scaleLines;
+	}
+
+	public float getScaleText()
+	{
+		return scaleText;
+	}
+
+	public void setScaleText(float scaleText)
+	{
+		this.scaleText = scaleText;
 	}
 
 	private CoordinateGeometryTransformer transformer;
@@ -216,8 +239,8 @@ public class InkscapeConfigMapRenderer
 			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
 					transformed);
 			layer.getObjects().add(path);
-			path.setStyle(
-					style(null, style.getColor(), 1, 1, 1, style.getWidth()));
+			path.setStyle(style(null, style.getColor(), 1, 1, 1,
+					style.getWidth() * scaleLines));
 			path.getStyle().setLineCap(LineCap.ROUND);
 			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
@@ -237,8 +260,8 @@ public class InkscapeConfigMapRenderer
 			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
 					transformed);
 			layer.getObjects().add(path);
-			path.setStyle(
-					style(null, style.getColor(), 1, 1, 1, style.getWidth()));
+			path.setStyle(style(null, style.getColor(), 1, 1, 1,
+					style.getWidth() * scaleLines));
 			path.getStyle().setLineCap(LineCap.ROUND);
 			path.getStyle().setLineJoin(LineJoin.ROUND);
 			path.getStyle().setDashArray(dash);
@@ -254,8 +277,8 @@ public class InkscapeConfigMapRenderer
 			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
 					transformed);
 			layer.getObjects().add(path);
-			path.setStyle(
-					style(null, style.getBg(), 1, 1, 1, style.getWidthBG()));
+			path.setStyle(style(null, style.getBg(), 1, 1, 1,
+					style.getWidthBG() * scaleLines));
 			path.getStyle().setLineCap(LineCap.ROUND);
 			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
@@ -265,8 +288,8 @@ public class InkscapeConfigMapRenderer
 			Path path = JtsToPath.convert(idFactory.nextId(), FillRule.EVEN_ODD,
 					transformed);
 			layer.getObjects().add(path);
-			path.setStyle(
-					style(null, style.getFg(), 1, 1, 1, style.getWidthFG()));
+			path.setStyle(style(null, style.getFg(), 1, 1, 1,
+					style.getWidthFG() * scaleLines));
 			path.getStyle().setLineCap(LineCap.ROUND);
 			path.getStyle().setLineJoin(LineJoin.ROUND);
 		}
@@ -293,7 +316,8 @@ public class InkscapeConfigMapRenderer
 
 		double padding = 5;
 
-		Font font = new Font(style.getFontName(), Font.PLAIN, style.getSize());
+		int fontSize = (int) (style.getSize() * scaleText + 0.5);
+		Font font = new Font(style.getFontName(), Font.PLAIN, fontSize);
 
 		float pathLength = AwtTextUtil.measurePathLength(path);
 		double textLength = AwtTextUtil.getTextWidth(font, label);
@@ -348,13 +372,12 @@ public class InkscapeConfigMapRenderer
 
 		layer.getObjects().add(labelPath1);
 		labelPath1.setStyle(style(null, style.getColorOutline(), 1, 1, 1,
-				style.getWidthOutline()));
+				style.getWidthOutline() * scaleText));
 		labelPath1.getStyle().setLineCap(LineCap.ROUND);
 		labelPath1.getStyle().setLineJoin(LineJoin.ROUND);
 
 		layer.getObjects().add(labelPath2);
-		labelPath2.setStyle(style(style.getColor(), null, 1, 1, 1,
-				style.getWidthOutline()));
+		labelPath2.setStyle(style(style.getColor(), null, 1, 1, 1, 0));
 	}
 
 }
