@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.MultiPolygon;
 
@@ -72,12 +71,7 @@ public class ConfigMapRenderer
 	protected float scaleLines = 1;
 	protected float scaleText = 1;
 
-	// We build the geometries to be rendered during construction and store them
-	// in these fields so that we don't have to recompute everything when
-	// rendering.
-	protected Map<AreaInstruction, List<Geometry>> areas = new HashMap<>();
-	protected Map<WayInstruction, List<LineString>> ways = new HashMap<>();
-	protected Map<LineString, String> names = new HashMap<>();
+	private CachedRenderingDataSource renderingData = new CachedRenderingDataSource();
 
 	public ConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
 			InMemoryListDataSet data, RenderInstructions instructions)
@@ -142,12 +136,12 @@ public class ConfigMapRenderer
 				.area(instructions.getInstructions());
 
 		for (AreaInstruction instruction : areaInstructions) {
-			areas.put(instruction, new ArrayList<>());
+			renderingData.getAreas().put(instruction, new ArrayList<>());
 			usedRelationWays.put(instruction, new HashSet<>());
 		}
 
 		for (WayInstruction instruction : wayInstructions) {
-			ways.put(instruction, new ArrayList<>());
+			renderingData.getWays().put(instruction, new ArrayList<>());
 		}
 
 		System.out.println("area relations...");
@@ -179,7 +173,7 @@ public class ConfigMapRenderer
 				if (!instruction.getSelector().matches(tags)) {
 					continue;
 				}
-				areas.get(instruction).add(area);
+				renderingData.getAreas().get(instruction).add(area);
 				try {
 					wayFinder.findMemberWays(relation,
 							usedRelationWays.get(instruction));
@@ -210,7 +204,7 @@ public class ConfigMapRenderer
 					continue;
 				}
 
-				areas.get(instruction).add(area);
+				renderingData.getAreas().get(instruction).add(area);
 			}
 		}
 
@@ -226,7 +220,8 @@ public class ConfigMapRenderer
 
 				Collection<LineString> paths = getLine(way);
 
-				List<LineString> strings = ways.get(instruction);
+				List<LineString> strings = renderingData.getWays()
+						.get(instruction);
 
 				for (LineString path : paths) {
 					if (!envelope.intersects(path.getEnvelopeInternal())) {
@@ -244,7 +239,7 @@ public class ConfigMapRenderer
 					if (!envelope.intersects(path.getEnvelopeInternal())) {
 						continue;
 					}
-					names.put(path, name);
+					renderingData.getNames().put(path, name);
 				}
 			}
 		}
@@ -259,7 +254,7 @@ public class ConfigMapRenderer
 	{
 		Graphics2D g = (Graphics2D) graphics;
 		GraphicsConfigMapRenderer renderer = new GraphicsConfigMapRenderer(bbox,
-				mercatorImage, instructions, areas, ways, names);
+				mercatorImage, instructions, renderingData);
 		renderer.setScaleLines(scaleLines);
 		renderer.setScaleText(scaleText);
 		renderer.setDrawBoundingBox(drawBoundingBox);
@@ -269,7 +264,7 @@ public class ConfigMapRenderer
 	public void paint(SvgFile svg)
 	{
 		InkscapeConfigMapRenderer renderer = new InkscapeConfigMapRenderer(bbox,
-				mercatorImage, instructions, areas, ways, names);
+				mercatorImage, instructions, renderingData);
 		renderer.setScaleLines(scaleLines);
 		renderer.setScaleText(scaleText);
 		renderer.paint(svg);

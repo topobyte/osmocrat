@@ -25,7 +25,6 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Path2D;
 import java.util.List;
-import java.util.Map;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -76,9 +75,7 @@ public class GraphicsConfigMapRenderer
 
 	private RenderInstructions instructions;
 
-	private Map<AreaInstruction, List<Geometry>> areas;
-	private Map<WayInstruction, List<LineString>> ways;
-	private Map<LineString, String> names;
+	private RenderingDataSource renderingData;
 
 	private TextIntersectionChecker textIntersectionChecker;
 
@@ -86,17 +83,12 @@ public class GraphicsConfigMapRenderer
 	private float scaleText = 1;
 
 	public GraphicsConfigMapRenderer(BBox bbox, MercatorImage mercatorImage,
-			RenderInstructions instructions,
-			Map<AreaInstruction, List<Geometry>> areas,
-			Map<WayInstruction, List<LineString>> ways,
-			Map<LineString, String> names)
+			RenderInstructions instructions, RenderingDataSource renderingData)
 	{
 		this.bbox = bbox;
 		this.mercatorImage = mercatorImage;
 		this.instructions = instructions;
-		this.areas = areas;
-		this.ways = ways;
-		this.names = names;
+		this.renderingData = renderingData;
 	}
 
 	public boolean isDrawBoundingBox()
@@ -149,11 +141,11 @@ public class GraphicsConfigMapRenderer
 		for (Instruction instruction : instructions.getInstructions()) {
 			if (instruction instanceof WayInstruction) {
 				WayInstruction wi = (WayInstruction) instruction;
-				List<LineString> strings = ways.get(instruction);
+				List<LineString> strings = renderingData.getWays(instruction);
 				render(g, wi, strings);
 			} else if (instruction instanceof AreaInstruction) {
 				AreaInstruction ai = (AreaInstruction) instruction;
-				List<Geometry> geometries = areas.get(instruction);
+				List<Geometry> geometries = renderingData.getAreas(instruction);
 				render(g, ai, geometries);
 			}
 		}
@@ -259,7 +251,7 @@ public class GraphicsConfigMapRenderer
 			List<LineString> strings)
 	{
 		for (LineString string : strings) {
-			String name = names.get(string);
+			String name = renderingData.getName(string);
 			if (name == null) {
 				continue;
 			}
