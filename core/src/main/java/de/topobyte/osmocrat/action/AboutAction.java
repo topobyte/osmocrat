@@ -20,6 +20,7 @@ package de.topobyte.osmocrat.action;
 import java.awt.event.ActionEvent;
 
 import de.topobyte.osmocrat.OsmocratMainUI;
+import de.topobyte.osmocrat.Version;
 
 public class AboutAction extends OsmocratAction
 {
@@ -35,7 +36,7 @@ public class AboutAction extends OsmocratAction
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		System.out.println("This is Osmocrat 0.0.1");
+		System.out.println("This is Osmocrat " + Version.getVersion());
 	}
 
 }

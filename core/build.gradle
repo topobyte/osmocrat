@@ -40,3 +40,37 @@ afterEvaluate { project ->
         }
     }
 }
+
+sourceSets {
+    main {
+        java {
+            srcDirs += ["${buildDir}/generated"]
+        }
+    }
+}
+
+task generateVersionSource {
+    inputs.property "version", project.version
+    outputs.dir "$buildDir/generated"
+    doFirst {
+        def file = file("$buildDir/generated/de/topobyte/osmocrat/Version.java")
+        file.parentFile.mkdirs()
+        file.text =
+"""// This file is generated, do not edit
+package de.topobyte.osmocrat;
+
+public class Version
+{
+
+	public static String getVersion()
+	{
+		return "$project.version";
+	}
+
+}
+"""
+    }
+}
+
+tasks.eclipse.dependsOn generateVersionSource
+tasks.compileJava.dependsOn generateVersionSource
