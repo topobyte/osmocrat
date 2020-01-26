@@ -26,13 +26,12 @@ import java.nio.file.Paths;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Polygon;
-import com.vividsolutions.jts.io.ParseException;
-import com.vividsolutions.jts.io.WKTReader;
 
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.adt.geo.BBoxString;

@@ -38,10 +38,11 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import org.locationtech.jts.geom.Envelope;
+
 import com.slimjars.dist.gnu.trove.list.TDoubleList;
 import com.slimjars.dist.gnu.trove.list.array.TDoubleArrayList;
 import com.slimjars.dist.gnu.trove.list.array.TLongArrayList;
-import com.vividsolutions.jts.geom.Envelope;
 
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.adt.geo.Coordinate;

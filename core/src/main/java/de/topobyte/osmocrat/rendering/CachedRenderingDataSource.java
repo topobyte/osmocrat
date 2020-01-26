@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.LineString;
 
 import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.Instruction;

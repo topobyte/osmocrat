@@ -73,8 +73,8 @@ public class TestMapRenderingConfigToPng
 
 		GraphicsConfigMapRenderer configRenderer = ConfigMapRenderer
 				.setupGraphicsRenderer(bbox, mapImage, data, instructions);
-		configRenderer.setScaleLines(1);
-		configRenderer.setScaleText(1);
+		configRenderer.setScaleLines(2);
+		configRenderer.setScaleText(2);
 
 		configRenderer.paint(graphics);
 

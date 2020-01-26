@@ -80,8 +80,8 @@ public class TestMapRenderingConfigToSvg
 
 		InkscapeConfigMapRenderer configRenderer = ConfigMapRenderer
 				.setupInkscapeRenderer(bbox, mapImage, data, instructions);
-		configRenderer.setScaleLines(1);
-		configRenderer.setScaleText(1);
+		configRenderer.setScaleLines(2);
+		configRenderer.setScaleText(2);
 		configRenderer.paint(svg);
 
 		Path file = Files.createTempFile("map", ".svg");

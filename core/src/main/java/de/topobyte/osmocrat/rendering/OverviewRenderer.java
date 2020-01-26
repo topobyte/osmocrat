@@ -29,8 +29,8 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryFactory;
 
 import de.topobyte.adt.geo.BBox;
 import de.topobyte.awt.util.GraphicsUtil;

@@ -17,7 +17,7 @@
 
 package de.topobyte.osmocrat.text;
 
-import com.vividsolutions.jts.geom.LineString;
+import org.locationtech.jts.geom.LineString;
 
 public class TextUtil
 {

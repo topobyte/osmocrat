@@ -25,12 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.locationtech.jts.geom.Envelope;
+import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.MultiPolygon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.LineString;
-import com.vividsolutions.jts.geom.MultiPolygon;
 
 import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;

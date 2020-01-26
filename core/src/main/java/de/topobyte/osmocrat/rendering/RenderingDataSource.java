@@ -19,8 +19,8 @@ package de.topobyte.osmocrat.rendering;
 
 import java.util.List;
 
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.LineString;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.LineString;
 
 import de.topobyte.osmocrat.rendering.config.instructions.Instruction;
 
