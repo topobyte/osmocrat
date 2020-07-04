@@ -39,3 +39,8 @@ To convert the downloaded files to other formats than `.osm`, use
            --input-format xml
            --output /path/to/some/osm/data/file.tbo
            --output-format tbo
+
+# TODO list
+
+* make it possible to find objects that reference an object at hand (as way
+  nodes or relation member)
