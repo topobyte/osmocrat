@@ -33,7 +33,7 @@ and like this respectively:
                                 --boundary /path/to/some/wkt/polygon.wkt
 
 To convert the downloaded files to other formats than `.osm`, use
-[topobyte/osm4j-utils](https://github.com/topobyte/osm4j-utils):
+[topobyte/osm4j-utils](https://github.com/topobyte/osm4j/tree/master/utils):
 
     OsmCat --input /path/to/some/osm/data/file.osm
            --input-format xml
