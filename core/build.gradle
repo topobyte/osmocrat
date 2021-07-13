@@ -18,7 +18,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile 'de.topobyte:osm4j-utils:0.2.0'
+    compile 'de.topobyte:osm4j-utils:1.2.0'
     compile 'de.topobyte:awt-utils:0.0.3'
     compile 'de.topobyte:swing-utils:0.0.12'
     compile 'de.topobyte:jts2awt:0.1.0'
@@ -26,7 +26,7 @@ dependencies {
     compile 'de.topobyte:jeography-tools:0.2.0'
     compile 'de.topobyte:chromaticity-core:0.0.2'
     compile 'de.topobyte:chromaticity-awt:0.0.2'
-    compile 'de.topobyte:overpass-utils:0.1.0'
+    compile 'de.topobyte:overpass-utils:0.2.0'
     compile 'de.topobyte:inkscape4j-core:0.1.0'
     compile 'de.topobyte:inkscape4j-jts:0.1.0'
     compile 'de.topobyte:inkscape4j-awt:0.1.0'
