@@ -1,9 +1,9 @@
 buildscript {
     repositories {
-        maven { url 'http://mvn.topobyte.de' }
+        maven { url 'https://mvn.topobyte.de' }
     }
     dependencies {
-        classpath 'de.topobyte:gradle-version-access-plugin:0.0.2'
+        classpath 'de.topobyte:gradle-version-access-plugin:0.1.0'
     }
 }
 
@@ -18,35 +18,42 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    compile 'de.topobyte:osm4j-utils:1.2.0'
-    compile 'de.topobyte:awt-utils:0.0.3'
-    compile 'de.topobyte:swing-utils:0.0.12'
-    compile 'de.topobyte:jts2awt:0.1.0'
-    compile 'de.topobyte:mercator-image:0.1.0'
-    compile 'de.topobyte:jeography-tools:0.2.0'
-    compile 'de.topobyte:chromaticity-core:0.0.2'
-    compile 'de.topobyte:chromaticity-awt:0.0.2'
-    compile 'de.topobyte:overpass-utils:0.2.0'
-    compile 'de.topobyte:inkscape4j-core:0.1.0'
-    compile 'de.topobyte:inkscape4j-jts:0.1.0'
-    compile 'de.topobyte:inkscape4j-awt:0.1.0'
-    compile 'de.topobyte:inkscape4j-writer:0.1.0'
+    api 'de.topobyte:osm4j-utils:1.2.0'
+    api 'de.topobyte:awt-utils:0.0.3'
+    api 'de.topobyte:swing-utils:0.0.12'
+    api 'de.topobyte:jts2awt:0.1.0'
+    api 'de.topobyte:mercator-image:0.1.0'
+    api 'de.topobyte:jeography-tools:0.2.0'
+    api 'de.topobyte:chromaticity-core:0.0.2'
+    api 'de.topobyte:chromaticity-awt:0.0.2'
+    api 'de.topobyte:overpass-utils:0.2.0'
+    api 'de.topobyte:inkscape4j-core:0.1.0'
+    api 'de.topobyte:inkscape4j-jts:0.1.0'
+    api 'de.topobyte:inkscape4j-awt:0.1.0'
+    api 'de.topobyte:inkscape4j-writer:0.1.0'
 
-    testRuntime 'org.slf4j:slf4j-log4j12:1.6.1'
-    testRuntime 'log4j:log4j:1.2.16'
+    testRuntimeOnly 'org.slf4j:slf4j-log4j12:1.6.1'
+    testRuntimeOnly 'log4j:log4j:1.2.16'
+}
+
+java {
+    withSourcesJar()
+}
+
+tasks.withType(GenerateModuleMetadata) {
+    enabled = false
 }
 
 def pomInfo = new XmlSlurper().parse(new File(projectDir, 'info.pom'));
 
-afterEvaluate { project ->
-    uploadArchives {
-        repositories {
-            mavenDeployer {
-                pom.project {
-                    name pomInfo.name
-                    description pomInfo.description
-                    url pomInfo.url
-                }
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+            pom {
+                name = "$pomInfo.name"
+                description = "$pomInfo.description"
+                url = "$pomInfo.url"
             }
         }
     }
