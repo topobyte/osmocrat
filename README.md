@@ -32,6 +32,9 @@ and like this respectively:
     ./scripts/osmocrat overpass --output /path/to/some/osm/data/file.osm
                                 --boundary /path/to/some/wkt/polygon.wkt
 
+    ./scripts/osmocrat overpass --output /path/to/some/osm/data/file.osm
+                                --raw "node[place=island]; out;"
+
 To convert the downloaded files to other formats than `.osm`, use
 [topobyte/osm4j-utils](https://github.com/topobyte/osm4j/tree/master/utils):
 
