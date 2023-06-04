@@ -23,6 +23,8 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -51,6 +53,7 @@ public class OsmocratOverpass
 
 	private static final String OPTION_OUTPUT = "output";
 	private static final String OPTION_BBOX = "bbox";
+	private static final String OPTION_RAW = "raw";
 	private static final String OPTION_BOUNDARY = "boundary";
 
 	public static ExeOptionsFactory OPTIONS_FACTORY = new ExeOptionsFactory() {
@@ -62,6 +65,7 @@ public class OsmocratOverpass
 			// @formatter:off
 			OptionHelper.addL(options, OPTION_OUTPUT, true, true, "file", "an OSM data file");
 			OptionHelper.addL(options, OPTION_BBOX, true, false, "bbox", "a bounding box to download");
+			OptionHelper.addL(options, OPTION_RAW, true, false, "query", "a query to download data for");
 			OptionHelper.addL(options, OPTION_BOUNDARY, true, false, "file", "a boundary to download (WKT)");
 			// @formatter:on
 			return new CommonsCliExeOptions(options, "[options]");
@@ -72,7 +76,6 @@ public class OsmocratOverpass
 	private static CliTool tool;
 
 	public static void main(String name, CommonsCliArguments arguments)
-			throws IOException
 	{
 		CommandLine line = arguments.getLine();
 
@@ -80,18 +83,24 @@ public class OsmocratOverpass
 		Path pathOutput = Paths.get(argOutput);
 
 		String argBbox = line.getOptionValue(OPTION_BBOX);
+		String argRaw = line.getOptionValue(OPTION_RAW);
 		String argBoundary = line.getOptionValue(OPTION_BOUNDARY);
 
 		tool = new CliTool(name, arguments.getOptions());
 
-		if (argBbox == null && argBoundary == null) {
+		List<String> exclusiveArgs = Arrays.asList(argBbox, argBoundary,
+				argRaw);
+		long numExclusiveArgs = exclusiveArgs.stream().filter(e -> e != null)
+				.count();
+
+		if (numExclusiveArgs == 0) {
 			tool.printMessageAndExit(
-					String.format("Please specify '%s' or '%s'", OPTION_BBOX,
-							OPTION_BOUNDARY));
-		} else if (argBbox != null && argBoundary != null) {
+					String.format("Please specify '%s', '%s' or '%s'",
+							OPTION_BBOX, OPTION_BOUNDARY, OPTION_RAW));
+		} else if (numExclusiveArgs > 1) {
 			tool.printMessageAndExit(String.format(
-					"Please specify either '%s' or '%s', not both", OPTION_BBOX,
-					OPTION_BOUNDARY));
+					"Please specify either '%s', '%s' or '%s', not multiple of them",
+					OPTION_BBOX, OPTION_BOUNDARY, OPTION_RAW));
 		}
 
 		if (argBbox != null) {
@@ -105,6 +114,8 @@ public class OsmocratOverpass
 		} else if (argBoundary != null) {
 			Path pathBoundary = Paths.get(argBoundary);
 			load(pathOutput, pathBoundary);
+		} else if (argRaw != null) {
+			load(pathOutput, argRaw);
 		}
 	}
 
@@ -146,4 +157,15 @@ public class OsmocratOverpass
 		}
 	}
 
+	private static void load(Path pathOutput, String rawQuery)
+	{
+		String query = OverpassUtil.query(rawQuery);
+		try {
+			InputStream input = new URL(query).openStream();
+			Files.copy(input, pathOutput);
+		} catch (IOException e) {
+			logger.error("Error while requesting data", e);
+			System.exit(1);
+		}
+	}
 }
