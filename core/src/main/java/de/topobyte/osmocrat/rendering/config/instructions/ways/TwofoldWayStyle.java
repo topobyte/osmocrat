@@ -18,6 +18,8 @@
 package de.topobyte.osmocrat.rendering.config.instructions.ways;
 
 import de.topobyte.chromaticity.ColorCode;
+import de.topobyte.osmocrat.rendering.config.instructions.LineCap;
+import de.topobyte.osmocrat.rendering.config.instructions.LineJoin;
 
 public class TwofoldWayStyle implements WayStyle
 {
@@ -26,6 +28,8 @@ public class TwofoldWayStyle implements WayStyle
 	private int widthBG;
 	private ColorCode fg;
 	private ColorCode bg;
+	private LineCap lineCap = LineCap.ROUND;
+	private LineJoin lineJoin = LineJoin.ROUND;
 
 	public TwofoldWayStyle(int widthFG, int widthBG, ColorCode fg, ColorCode bg)
 	{
@@ -33,6 +37,17 @@ public class TwofoldWayStyle implements WayStyle
 		this.widthBG = widthBG;
 		this.fg = fg;
 		this.bg = bg;
+	}
+
+	public TwofoldWayStyle(int widthFG, int widthBG, ColorCode fg, ColorCode bg,
+			LineCap lineCap, LineJoin lineJoin)
+	{
+		this.widthFG = widthFG;
+		this.widthBG = widthBG;
+		this.fg = fg;
+		this.bg = bg;
+		this.lineCap = lineCap;
+		this.lineJoin = lineJoin;
 	}
 
 	public int getWidthFG()
@@ -73,6 +88,26 @@ public class TwofoldWayStyle implements WayStyle
 	public void setBg(ColorCode bg)
 	{
 		this.bg = bg;
+	}
+
+	public LineCap getLineCap()
+	{
+		return lineCap;
+	}
+
+	public void setLineCap(LineCap lineCap)
+	{
+		this.lineCap = lineCap;
+	}
+
+	public LineJoin getLineJoin()
+	{
+		return lineJoin;
+	}
+
+	public void setLineJoin(LineJoin lineJoin)
+	{
+		this.lineJoin = lineJoin;
 	}
 
 }

@@ -20,6 +20,8 @@ package de.topobyte.osmocrat.rendering.config.instructions.ways;
 import java.util.List;
 
 import de.topobyte.chromaticity.ColorCode;
+import de.topobyte.osmocrat.rendering.config.instructions.LineCap;
+import de.topobyte.osmocrat.rendering.config.instructions.LineJoin;
 
 public class DashedWayStyle implements WayStyle
 {
@@ -28,6 +30,8 @@ public class DashedWayStyle implements WayStyle
 	private ColorCode color;
 	private List<Float> dashArray;
 	private float dashPhase;
+	private LineCap lineCap = LineCap.ROUND;
+	private LineJoin lineJoin = LineJoin.ROUND;
 
 	public DashedWayStyle(int width, ColorCode color, List<Float> dashArray,
 			float dashPhase)
@@ -36,6 +40,17 @@ public class DashedWayStyle implements WayStyle
 		this.color = color;
 		this.dashArray = dashArray;
 		this.dashPhase = dashPhase;
+	}
+
+	public DashedWayStyle(int width, ColorCode color, List<Float> dashArray,
+			float dashPhase, LineCap lineCap, LineJoin lineJoin)
+	{
+		this.width = width;
+		this.color = color;
+		this.dashArray = dashArray;
+		this.dashPhase = dashPhase;
+		this.lineCap = lineCap;
+		this.lineJoin = lineJoin;
 	}
 
 	public int getWidth()
@@ -76,6 +91,26 @@ public class DashedWayStyle implements WayStyle
 	public void setDashPhase(float dashPhase)
 	{
 		this.dashPhase = dashPhase;
+	}
+
+	public LineCap getLineCap()
+	{
+		return lineCap;
+	}
+
+	public void setLineCap(LineCap lineCap)
+	{
+		this.lineCap = lineCap;
+	}
+
+	public LineJoin getLineJoin()
+	{
+		return lineJoin;
+	}
+
+	public void setLineJoin(LineJoin lineJoin)
+	{
+		this.lineJoin = lineJoin;
 	}
 
 }

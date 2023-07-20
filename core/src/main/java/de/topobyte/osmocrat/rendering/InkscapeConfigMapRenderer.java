@@ -178,8 +178,8 @@ public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 			layer.getObjects().add(path);
 			path.setStyle(style(null, style.getColor(), 1, 1, 1,
 					style.getWidth() * scaleLines));
-			path.getStyle().setLineCap(LineCap.ROUND);
-			path.getStyle().setLineJoin(LineJoin.ROUND);
+			path.getStyle().setLineCap(cap(style.getLineCap()));
+			path.getStyle().setLineJoin(join(style.getLineJoin()));
 		}
 	}
 
@@ -201,8 +201,8 @@ public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 			layer.getObjects().add(path);
 			path.setStyle(style(null, style.getColor(), 1, 1, 1,
 					style.getWidth() * scaleLines));
-			path.getStyle().setLineCap(LineCap.ROUND);
-			path.getStyle().setLineJoin(LineJoin.ROUND);
+			path.getStyle().setLineCap(cap(style.getLineCap()));
+			path.getStyle().setLineJoin(join(style.getLineJoin()));
 			path.getStyle().setDashArray(dash);
 			path.getStyle().setDashOffset(style.getDashPhase() * scaleLines);
 		}
@@ -218,8 +218,8 @@ public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 			layer.getObjects().add(path);
 			path.setStyle(style(null, style.getBg(), 1, 1, 1,
 					style.getWidthBG() * scaleLines));
-			path.getStyle().setLineCap(LineCap.ROUND);
-			path.getStyle().setLineJoin(LineJoin.ROUND);
+			path.getStyle().setLineCap(cap(style.getLineCap()));
+			path.getStyle().setLineJoin(join(style.getLineJoin()));
 		}
 
 		for (LineString string : strings) {
@@ -229,8 +229,8 @@ public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 			layer.getObjects().add(path);
 			path.setStyle(style(null, style.getFg(), 1, 1, 1,
 					style.getWidthFG() * scaleLines));
-			path.getStyle().setLineCap(LineCap.ROUND);
-			path.getStyle().setLineJoin(LineJoin.ROUND);
+			path.getStyle().setLineCap(cap(style.getLineCap()));
+			path.getStyle().setLineJoin(join(style.getLineJoin()));
 		}
 	}
 
@@ -317,6 +317,34 @@ public class InkscapeConfigMapRenderer extends BaseConfigMapRenderer
 
 		layer.getObjects().add(labelPath2);
 		labelPath2.setStyle(style(style.getColor(), null, 1, 1, 1, 0));
+	}
+
+	private LineJoin join(
+			de.topobyte.osmocrat.rendering.config.instructions.LineJoin lineJoin)
+	{
+		switch (lineJoin) {
+		default:
+		case ROUND:
+			return LineJoin.ROUND;
+		case BEVEL:
+			return LineJoin.BEVEL;
+		case MITER:
+			return LineJoin.MITER;
+		}
+	}
+
+	private LineCap cap(
+			de.topobyte.osmocrat.rendering.config.instructions.LineCap lineCap)
+	{
+		switch (lineCap) {
+		default:
+		case ROUND:
+			return LineCap.ROUND;
+		case BUTT:
+			return LineCap.BUTT;
+		case SQUARE:
+			return LineCap.SQUARE;
+		}
 	}
 
 }

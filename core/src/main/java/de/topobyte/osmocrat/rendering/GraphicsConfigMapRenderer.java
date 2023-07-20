@@ -42,6 +42,8 @@ import de.topobyte.mercator.image.MercatorImage;
 import de.topobyte.osmocrat.rendering.config.RenderInstructions;
 import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.Instruction;
+import de.topobyte.osmocrat.rendering.config.instructions.LineCap;
+import de.topobyte.osmocrat.rendering.config.instructions.LineJoin;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.area.AreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
@@ -135,7 +137,7 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 	{
 		g.setColor(AwtColors.convert(style.getColor()));
 		g.setStroke(new BasicStroke(style.getWidth() * scaleLines,
-				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+				cap(style.getLineCap()), join(style.getLineJoin())));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
@@ -147,7 +149,7 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 	{
 		g.setColor(AwtColors.convert(style.getBg()));
 		g.setStroke(new BasicStroke(style.getWidthBG() * scaleLines,
-				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+				cap(style.getLineCap()), join(style.getLineJoin())));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
@@ -156,7 +158,7 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 
 		g.setColor(AwtColors.convert(style.getFg()));
 		g.setStroke(new BasicStroke(style.getWidthFG() * scaleLines,
-				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+				cap(style.getLineCap()), join(style.getLineJoin())));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
 			g.draw(path);
@@ -176,7 +178,7 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 
 		g.setColor(AwtColors.convert(style.getColor()));
 		g.setStroke(new BasicStroke(style.getWidth() * scaleLines,
-				BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 10.0f, dash,
+				cap(style.getLineCap()), join(style.getLineJoin()), 10.0f, dash,
 				style.getDashPhase() * scaleLines));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
@@ -256,6 +258,32 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 
 		g.setColor(AwtColors.convert(style.getColor()));
 		g.fill(shape);
+	}
+
+	private int join(LineJoin lineJoin)
+	{
+		switch (lineJoin) {
+		default:
+		case ROUND:
+			return BasicStroke.JOIN_ROUND;
+		case BEVEL:
+			return BasicStroke.JOIN_BEVEL;
+		case MITER:
+			return BasicStroke.JOIN_MITER;
+		}
+	}
+
+	private int cap(LineCap lineCap)
+	{
+		switch (lineCap) {
+		default:
+		case ROUND:
+			return BasicStroke.CAP_ROUND;
+		case BUTT:
+			return BasicStroke.CAP_BUTT;
+		case SQUARE:
+			return BasicStroke.CAP_SQUARE;
+		}
 	}
 
 }

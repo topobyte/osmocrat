@@ -26,6 +26,8 @@ import java.util.List;
 
 import de.topobyte.chromaticity.ColorCode;
 import de.topobyte.osmocrat.rendering.config.instructions.AreaInstruction;
+import de.topobyte.osmocrat.rendering.config.instructions.LineCap;
+import de.topobyte.osmocrat.rendering.config.instructions.LineJoin;
 import de.topobyte.osmocrat.rendering.config.instructions.WayInstruction;
 import de.topobyte.osmocrat.rendering.config.instructions.area.SimpleAreaStyle;
 import de.topobyte.osmocrat.rendering.config.instructions.ways.DashedWayStyle;
@@ -115,9 +117,11 @@ public class Rendering
 		addArea(ri, "waterway", "riverbank", new ColorCode(0xaad3de));
 		addArea(ri, "natural", "water", new ColorCode(0xaad3de));
 
-		addWay(ri, "railway", "rail", 2, new float[] { 2, 2 }, GRAY.color());
+		addWay(ri, "railway", "rail", 1, GRAY.color());
+		addWay(ri, "railway", "rail", 1, new float[] { 4, 4 }, BLACK.color());
 
-		addWay(ri, "highway", "footway", 1, new float[] { 2, 2 }, GRAY.color());
+		addWay(ri, "highway", "footway", 1, new float[] { 2, 2 },
+				new ColorCode(0xA0A0A0));
 
 		addWay(ri, "highway", "pedestrian", 3, GRAY.color());
 		addWay(ri, "highway", "trunk", 3, GRAY.color());
@@ -154,7 +158,8 @@ public class Rendering
 		}
 
 		ri.add(new WayInstruction(new TagSelector(key, value),
-				new DashedWayStyle(width, color, dashArray, 0)));
+				new DashedWayStyle(width, color, dashArray, 0, LineCap.BUTT,
+						LineJoin.ROUND)));
 	}
 
 	private static void addWay(RenderInstructions ri, String key, String value,
