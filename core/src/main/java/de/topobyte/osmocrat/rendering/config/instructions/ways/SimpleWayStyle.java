@@ -24,18 +24,18 @@ import de.topobyte.osmocrat.rendering.config.instructions.LineJoin;
 public class SimpleWayStyle implements WayStyle
 {
 
-	private int width;
+	private double width;
 	private ColorCode color;
 	private LineCap lineCap = LineCap.ROUND;
 	private LineJoin lineJoin = LineJoin.ROUND;
 
-	public SimpleWayStyle(int width, ColorCode color)
+	public SimpleWayStyle(double width, ColorCode color)
 	{
 		this.width = width;
 		this.color = color;
 	}
 
-	public SimpleWayStyle(int width, ColorCode color, LineCap lineCap,
+	public SimpleWayStyle(double width, ColorCode color, LineCap lineCap,
 			LineJoin lineJoin)
 	{
 		this.width = width;
@@ -44,12 +44,12 @@ public class SimpleWayStyle implements WayStyle
 		this.lineJoin = lineJoin;
 	}
 
-	public int getWidth()
+	public double getWidth()
 	{
 		return width;
 	}
 
-	public void setWidth(int width)
+	public void setWidth(double width)
 	{
 		this.width = width;
 	}

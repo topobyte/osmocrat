@@ -120,14 +120,20 @@ public class Rendering
 		addWay(ri, "railway", "rail", 1, GRAY.color());
 		addWay(ri, "railway", "rail", 1, new float[] { 4, 4 }, BLACK.color());
 
-		addWay(ri, "highway", "footway", 1, new float[] { 2, 2 },
-				new ColorCode(0xA0A0A0));
+		addWay(ri, "highway", "footway", 1.6, new float[] { 1, 1 },
+				new ColorCode(0xC0C0C0));
+		addWay(ri, "highway", "footway", 0.8, new ColorCode(0xD0D0D0));
+
+		addWay(ri, "highway", "path", 1.6, new float[] { 1, 1 },
+				new ColorCode(0xC0C0C0));
+		addWay(ri, "highway", "path", 0.8, new ColorCode(0xD0D0D0));
 
 		addWay(ri, "highway", "pedestrian", 3, GRAY.color());
 		addWay(ri, "highway", "trunk", 3, GRAY.color());
 		addWay(ri, "highway", "primary", 3, GRAY.color());
 		addWay(ri, "highway", "secondary", 3, GRAY.color());
 		addWay(ri, "highway", "tertiary", 3, GRAY.color());
+		addWay(ri, "highway", "service", 2.5, GRAY.color());
 		addWay(ri, "highway", "residential", 3, GRAY.color());
 		addWay(ri, "highway", "living_street", 3, GRAY.color());
 
@@ -136,6 +142,7 @@ public class Rendering
 		addWay(ri, "highway", "primary", 2, WHITE.color());
 		addWay(ri, "highway", "secondary", 2, WHITE.color());
 		addWay(ri, "highway", "tertiary", 2, WHITE.color());
+		addWay(ri, "highway", "service", 1.5, WHITE.color());
 		addWay(ri, "highway", "residential", 2, WHITE.color());
 		addWay(ri, "highway", "living_street", 2, WHITE.color());
 
@@ -143,14 +150,14 @@ public class Rendering
 	}
 
 	private static void addWay(RenderInstructions ri, String key, String value,
-			int width, ColorCode color)
+			double width, ColorCode color)
 	{
 		ri.add(new WayInstruction(new TagSelector(key, value),
 				new SimpleWayStyle(width, color)));
 	}
 
 	private static void addWay(RenderInstructions ri, String key, String value,
-			int width, float[] dashes, ColorCode color)
+			double width, float[] dashes, ColorCode color)
 	{
 		List<Float> dashArray = new ArrayList<>();
 		for (int i = 0; i < dashes.length; i++) {

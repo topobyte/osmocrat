@@ -24,14 +24,15 @@ import de.topobyte.osmocrat.rendering.config.instructions.LineJoin;
 public class TwofoldWayStyle implements WayStyle
 {
 
-	private int widthFG;
-	private int widthBG;
+	private double widthFG;
+	private double widthBG;
 	private ColorCode fg;
 	private ColorCode bg;
 	private LineCap lineCap = LineCap.ROUND;
 	private LineJoin lineJoin = LineJoin.ROUND;
 
-	public TwofoldWayStyle(int widthFG, int widthBG, ColorCode fg, ColorCode bg)
+	public TwofoldWayStyle(double widthFG, double widthBG, ColorCode fg,
+			ColorCode bg)
 	{
 		this.widthFG = widthFG;
 		this.widthBG = widthBG;
@@ -39,8 +40,8 @@ public class TwofoldWayStyle implements WayStyle
 		this.bg = bg;
 	}
 
-	public TwofoldWayStyle(int widthFG, int widthBG, ColorCode fg, ColorCode bg,
-			LineCap lineCap, LineJoin lineJoin)
+	public TwofoldWayStyle(double widthFG, double widthBG, ColorCode fg,
+			ColorCode bg, LineCap lineCap, LineJoin lineJoin)
 	{
 		this.widthFG = widthFG;
 		this.widthBG = widthBG;
@@ -50,22 +51,22 @@ public class TwofoldWayStyle implements WayStyle
 		this.lineJoin = lineJoin;
 	}
 
-	public int getWidthFG()
+	public double getWidthFG()
 	{
 		return widthFG;
 	}
 
-	public void setWidthFG(int widthFG)
+	public void setWidthFG(double widthFG)
 	{
 		this.widthFG = widthFG;
 	}
 
-	public int getWidthBG()
+	public double getWidthBG()
 	{
 		return widthBG;
 	}
 
-	public void setWidthBG(int widthBG)
+	public void setWidthBG(double widthBG)
 	{
 		this.widthBG = widthBG;
 	}

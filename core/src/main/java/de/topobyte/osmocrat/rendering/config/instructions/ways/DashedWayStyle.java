@@ -26,14 +26,14 @@ import de.topobyte.osmocrat.rendering.config.instructions.LineJoin;
 public class DashedWayStyle implements WayStyle
 {
 
-	private int width;
+	private double width;
 	private ColorCode color;
 	private List<Float> dashArray;
 	private float dashPhase;
 	private LineCap lineCap = LineCap.ROUND;
 	private LineJoin lineJoin = LineJoin.ROUND;
 
-	public DashedWayStyle(int width, ColorCode color, List<Float> dashArray,
+	public DashedWayStyle(double width, ColorCode color, List<Float> dashArray,
 			float dashPhase)
 	{
 		this.width = width;
@@ -42,7 +42,7 @@ public class DashedWayStyle implements WayStyle
 		this.dashPhase = dashPhase;
 	}
 
-	public DashedWayStyle(int width, ColorCode color, List<Float> dashArray,
+	public DashedWayStyle(double width, ColorCode color, List<Float> dashArray,
 			float dashPhase, LineCap lineCap, LineJoin lineJoin)
 	{
 		this.width = width;
@@ -53,12 +53,12 @@ public class DashedWayStyle implements WayStyle
 		this.lineJoin = lineJoin;
 	}
 
-	public int getWidth()
+	public double getWidth()
 	{
 		return width;
 	}
 
-	public void setWidth(int width)
+	public void setWidth(double width)
 	{
 		this.width = width;
 	}

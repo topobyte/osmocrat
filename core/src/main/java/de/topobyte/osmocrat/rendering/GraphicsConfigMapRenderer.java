@@ -136,7 +136,7 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 			List<LineString> strings)
 	{
 		g.setColor(AwtColors.convert(style.getColor()));
-		g.setStroke(new BasicStroke(style.getWidth() * scaleLines,
+		g.setStroke(new BasicStroke((float) (style.getWidth() * scaleLines),
 				cap(style.getLineCap()), join(style.getLineJoin())));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
@@ -148,7 +148,7 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 			List<LineString> strings)
 	{
 		g.setColor(AwtColors.convert(style.getBg()));
-		g.setStroke(new BasicStroke(style.getWidthBG() * scaleLines,
+		g.setStroke(new BasicStroke((float) (style.getWidthBG() * scaleLines),
 				cap(style.getLineCap()), join(style.getLineJoin())));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
@@ -157,7 +157,7 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 		}
 
 		g.setColor(AwtColors.convert(style.getFg()));
-		g.setStroke(new BasicStroke(style.getWidthFG() * scaleLines,
+		g.setStroke(new BasicStroke((float) (style.getWidthFG() * scaleLines),
 				cap(style.getLineCap()), join(style.getLineJoin())));
 		for (LineString string : strings) {
 			Path2D path = Jts2Awt.getPath(string, mercatorImage);
@@ -177,7 +177,7 @@ public class GraphicsConfigMapRenderer extends BaseConfigMapRenderer
 		DashArrays.scale(dash, scaleLines);
 
 		g.setColor(AwtColors.convert(style.getColor()));
-		g.setStroke(new BasicStroke(style.getWidth() * scaleLines,
+		g.setStroke(new BasicStroke((float) (style.getWidth() * scaleLines),
 				cap(style.getLineCap()), join(style.getLineJoin()), 10.0f, dash,
 				style.getDashPhase() * scaleLines));
 		for (LineString string : strings) {
