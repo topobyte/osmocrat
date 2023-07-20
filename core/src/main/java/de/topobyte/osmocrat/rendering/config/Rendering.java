@@ -108,6 +108,36 @@ public class Rendering
 		return ri;
 	}
 
+	public static RenderInstructions style4()
+	{
+		RenderInstructions ri = new RenderInstructions();
+
+		addArea(ri, "waterway", "riverbank", new ColorCode(0xaad3de));
+		addArea(ri, "natural", "water", new ColorCode(0xaad3de));
+
+		addWay(ri, "railway", "rail", 2, new float[] { 2, 2 }, GRAY.color());
+
+		addWay(ri, "highway", "footway", 1, new float[] { 2, 2 }, GRAY.color());
+
+		addWay(ri, "highway", "pedestrian", 3, GRAY.color());
+		addWay(ri, "highway", "trunk", 3, GRAY.color());
+		addWay(ri, "highway", "primary", 3, GRAY.color());
+		addWay(ri, "highway", "secondary", 3, GRAY.color());
+		addWay(ri, "highway", "tertiary", 3, GRAY.color());
+		addWay(ri, "highway", "residential", 3, GRAY.color());
+		addWay(ri, "highway", "living_street", 3, GRAY.color());
+
+		addWay(ri, "highway", "pedestrian", 2, new ColorCode(230, 230, 230));
+		addWay(ri, "highway", "trunk", 2, WHITE.color());
+		addWay(ri, "highway", "primary", 2, WHITE.color());
+		addWay(ri, "highway", "secondary", 2, WHITE.color());
+		addWay(ri, "highway", "tertiary", 2, WHITE.color());
+		addWay(ri, "highway", "residential", 2, WHITE.color());
+		addWay(ri, "highway", "living_street", 2, WHITE.color());
+
+		return ri;
+	}
+
 	private static void addWay(RenderInstructions ri, String key, String value,
 			int width, ColorCode color)
 	{
