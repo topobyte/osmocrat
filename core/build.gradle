@@ -18,12 +18,12 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    api 'de.topobyte:osm4j-utils:1.2.0'
+    api 'de.topobyte:osm4j-utils:1.3.0'
     api 'de.topobyte:awt-utils:0.0.3'
-    api 'de.topobyte:swing-utils:0.0.12'
-    api 'de.topobyte:jts2awt:0.1.0'
-    api 'de.topobyte:mercator-image:0.1.0'
-    api 'de.topobyte:jeography-tools:0.2.0'
+    api 'de.topobyte:swing-utils:0.0.13'
+    api 'de.topobyte:jts2awt:0.2.0'
+    api 'de.topobyte:mercator-image:0.2.0'
+    api 'de.topobyte:jeography-tools:0.3.0'
     api 'de.topobyte:chromaticity-core:0.0.2'
     api 'de.topobyte:chromaticity-awt:0.0.2'
     api 'de.topobyte:overpass-utils:0.2.0'
