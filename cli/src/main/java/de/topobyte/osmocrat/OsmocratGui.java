@@ -30,6 +30,8 @@ import de.topobyte.osm4j.core.dataset.InMemoryListDataSet;
 import de.topobyte.osm4j.core.dataset.ListDataSetLoader;
 import de.topobyte.osm4j.utils.FileFormat;
 import de.topobyte.osm4j.utils.OsmIoUtils;
+import de.topobyte.shared.preferences.SharedPreferences;
+import de.topobyte.swing.util.SwingUtils;
 import de.topobyte.utilities.apache.commons.cli.OptionHelper;
 import de.topobyte.utilities.apache.commons.cli.commands.args.CommonsCliArguments;
 import de.topobyte.utilities.apache.commons.cli.commands.options.CommonsCliExeOptions;
@@ -62,6 +64,8 @@ public class OsmocratGui
 
 		String argInput = line.getOptionValue(OPTION_INPUT);
 		Path pathInput = Paths.get(argInput);
+
+		SwingUtils.setUiScale(SharedPreferences.getUIScale());
 
 		System.out.println("Loading data from file: " + pathInput);
 		OsmIterator input = OsmIoUtils.setupOsmIterator(
