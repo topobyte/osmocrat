@@ -18,7 +18,7 @@ sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
 dependencies {
-    api 'de.topobyte:osm4j-utils:1.3.0'
+    api 'de.topobyte:osm4j-utils:1.4.1'
     api 'de.topobyte:awt-utils:0.0.3'
     api 'de.topobyte:swing-utils:0.0.13'
     api 'de.topobyte:jts2awt:0.2.0'
@@ -26,14 +26,13 @@ dependencies {
     api 'de.topobyte:jeography-tools:0.3.0'
     api 'de.topobyte:chromaticity-core:0.0.2'
     api 'de.topobyte:chromaticity-awt:0.0.2'
-    api 'de.topobyte:overpass-utils:0.2.0'
-    api 'de.topobyte:inkscape4j-core:0.1.0'
-    api 'de.topobyte:inkscape4j-jts:0.1.0'
-    api 'de.topobyte:inkscape4j-awt:0.1.0'
-    api 'de.topobyte:inkscape4j-writer:0.1.0'
+    api 'de.topobyte:overpass-utils:0.3.0'
+    api 'de.topobyte:inkscape4j-core:0.2.1'
+    api 'de.topobyte:inkscape4j-jts:0.2.1'
+    api 'de.topobyte:inkscape4j-awt:0.2.1'
+    api 'de.topobyte:inkscape4j-writer:0.2.1'
 
-    testRuntimeOnly 'org.slf4j:slf4j-log4j12:1.6.1'
-    testRuntimeOnly 'log4j:log4j:1.2.16'
+    testRuntimeOnly 'org.slf4j:slf4j-reload4j:2.0.17'
 }
 
 java {
